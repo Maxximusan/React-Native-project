@@ -50,6 +50,19 @@ export default function App() {
     "roboto-700": require("./assets/fonts/Roboto-Bold.ttf"),
   });
 
+  useEffect(() => {
+    const onChange = () => {
+      const width = Dimensions.get("window").width - 20 * 2;
+
+      // console.log("width", width);
+      setdimensions(width);
+    };
+    const addEvLis = Dimensions.addEventListener("change", onChange);
+    return () => {
+      addEvLis?.remove();
+    };
+  }, []);
+
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -59,19 +72,6 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
-
-      // console.log("width", width);
-      setdimensions(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
 
   const keyboardHide = () => {
     // setIsShowKeyboard(false);
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "flex-end",
-    // alignItems: "center",
+    alignItems: "center",
   },
 
   form: {
