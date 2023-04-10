@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
 //   Dimensions,
 } from "react-native";
 
@@ -36,53 +37,56 @@ export const LoginScreen = (props) => {
         <ImageBackground
           style={styles.image}
           source={require("../assets/images/Photo-BG.jpg")}
-        >
-          <View style={styles.formContainer}>
-        <View style={{ ...styles.form, width: dimensions }}>
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Войти</Text>
-            </View>
+          >
+            
+            <View style={styles.formContainer}>
+              <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={250}>
+                 <View style={{ ...styles.form, width: dimensions }}>
+                   <View style={styles.header}>
+                      <Text style={styles.headerTitle}>Войти</Text>
+                   </View>
 
-            <View style={{ marginBottom: 16 }}>
+                    <View style={{ marginBottom: 16 }}>
+              
+                       <TextInput
+                       style={styles.input}
+                        textAlign={"left"}
+                         value={state.email}
+                           onChangeText={(value) =>
+                          setstate((prevState) => ({ ...prevState, email: value }))
+                          }
+                          placeholder="Адресс электронной почты"
+                          placeholderTextColor={`#ff0000`}
+                         />
+                    </View>
+                  <View style={{ marginBottom: 43 }}>
               
               <TextInput
                 style={styles.input}
-                textAlign={"center"}
-                value={state.email}
-                onChangeText={(value) =>
-                  setstate((prevState) => ({ ...prevState, email: value }))
-                }
-                     placeholder="Адресс электронной почты"
-                placeholderTextColor={`#ff0000`}
-              />
-            </View>
-            <View style={{ marginBottom: 43 }}>
-              
-              <TextInput
-                style={styles.input}
-                textAlign={"center"}
+                textAlign={"left"}
                 secureTextEntry={true}
                 value={state.password}
                 onChangeText={(value) =>
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
-                    placeholder="Пароль"
+                placeholder="Пароль"
                 placeholderTextColor={`#ff0000`}
               />
-            </View>
-            <TouchableOpacity
+                   </View>
+             <TouchableOpacity
               style={styles.btn}
               activeOpacity={0.4}
               onPress={keyboardHide}
             >
               <Text style={styles.btnTitle}>Войти</Text>
-           </TouchableOpacity>
-            <View style={{alignItems: 'center'}}>
-               <Text style={styles.noAkReg}>Нет аккаунта? Зарегистрироваться</Text>  
-           </View>                      
-        </View>
-     </View>
-         
+            </TouchableOpacity>
+                 <View style={{alignItems: 'center'}}>
+                    <Text style={styles.noAkReg}>Нет аккаунта? Зарегистрироваться</Text>  
+                 </View>                      
+              </View>
+              </KeyboardAvoidingView>  
+             </View>
+           
         </ImageBackground>
         
       </View>
@@ -102,22 +106,24 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: "cover",
+    height: 812,
     justifyContent: "flex-end",
     alignItems: "center",
+    
   },
 
   formContainer: {
     backgroundColor: "#fff",
       paddingHorizontal: 16,
       paddingTop: 32,
-      paddingBottom: 90,
-      borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
+      paddingBottom: 70,
+      borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   },
 
   form: {
     // marginHorizontal: 40,
-    marginBottom: 40,
+    // marginBottom: 40,
     // backgroundColor: "#fff",
     // padding: 92 16 78 16
     // paddingHorizontal: 16,
@@ -127,10 +133,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: `#90ee90`,
     // margin: 20,
-    height: 40,
+    height: 50,
     borderRadius: 6,
     color: `#212121`,
-    outlineColor: "#FF6C00",
+    // outlineColor: "#FF6C00",
+    paddingLeft: 16,
   },
 
   inputTitle: {
@@ -175,7 +182,9 @@ const styles = StyleSheet.create({
         fontFamily: "roboto-400",
          fontSize: 16,
         lineHeight: 19,
-        color: '#1B4371',
+      color: '#1B4371',
+      
+        
     
   },
 });
