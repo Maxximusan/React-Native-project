@@ -17,6 +17,7 @@ import { useCallback } from "react";
 import * as SplashScreen from "expo-splash-screen";
 
 import { LoginScreen } from "./Screens/LoginScreen";
+import { RegistrationScreen } from "./Screens/RegistrationScreen";
 // const initialState = {
 //   email: "",
 //   password: "",
@@ -68,7 +69,8 @@ export default function App() {
 
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
-      <LoginScreen dimensions={dimensions} />
+      <RegistrationScreen dimensions={dimensions} />
+      {/* <LoginScreen dimensions={dimensions} /> */}
       <StatusBar style="auto" />
     </View>
   );
