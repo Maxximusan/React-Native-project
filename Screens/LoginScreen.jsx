@@ -22,7 +22,13 @@ const initialState = {
 export const LoginScreen = (props) => {
     const {dimensions} = props
     const [state, setstate] = useState(initialState);
-    
+    const [showPassword, setShowPassword] = useState(true)
+
+
+    const putShowPassword = () => {
+        setShowPassword(prev => !prev)
+        
+    }
 
 
     const keyboardHide = () => {
@@ -64,14 +70,18 @@ export const LoginScreen = (props) => {
               <TextInput
                 style={styles.input}
                 textAlign={"left"}
-                secureTextEntry={true}
+                secureTextEntry={showPassword}
                 value={state.password}
                 onChangeText={(value) =>
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
                 placeholder="Пароль"
                 placeholderTextColor={`#ff0000`}
-              />
+                    />
+                    
+                    <TouchableOpacity style={ styles.showPassword} onPress={putShowPassword}>
+                         <Text>Показать</Text>               
+                </TouchableOpacity>
                    </View>
              <TouchableOpacity
               style={styles.btn}
@@ -184,7 +194,15 @@ const styles = StyleSheet.create({
         lineHeight: 19,
       color: '#1B4371',
       
-        
-    
   },
+    showPassword: {
+        position: 'absolute',
+        top: 15,
+        left: 300,
+        // backgroundColor: '#FF6C00',
+        // color: "#FFF",
+        width: 71,
+        height: 19,
+         borderRadius: 50,
+    },
 });

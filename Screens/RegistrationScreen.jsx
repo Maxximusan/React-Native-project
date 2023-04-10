@@ -19,7 +19,8 @@ import {
 const initialState = {
   login: '',
     email: "",
-  password: "",
+    password: "",
+  
 };
 
 
@@ -27,13 +28,19 @@ const initialState = {
 export const RegistrationScreen = (props) => {
 
      const {dimensions} = props
-    const [state, setstate] = useState(initialState);
-    
+    const [state, setState] = useState(initialState);
+    const [showPassword, setShowPassword] = useState(true)
+
+
+    const putShowPassword = () => {
+        setShowPassword(prev => !prev)
+        
+    }
 
     const keyboardHide = () => {
     Keyboard.dismiss();
     console.log(state);
-    setstate(initialState);
+    setState(initialState);
   };
 
     return (
@@ -63,7 +70,7 @@ export const RegistrationScreen = (props) => {
                         textAlign={"left"}
                          value={state.login}
                            onChangeText={(value) =>
-                          setstate((prevState) => ({ ...prevState, login: value }))
+                          setState((prevState) => ({ ...prevState, login: value }))
                           }
                           placeholder="Логин"
                           placeholderTextColor={`#ff0000`}
@@ -78,7 +85,7 @@ export const RegistrationScreen = (props) => {
                         textAlign={"left"}
                          value={state.email}
                            onChangeText={(value) =>
-                          setstate((prevState) => ({ ...prevState, email: value }))
+                          setState((prevState) => ({ ...prevState, email: value }))
                           }
                           placeholder="Адресс электронной почты"
                           placeholderTextColor={`#ff0000`}
@@ -89,16 +96,16 @@ export const RegistrationScreen = (props) => {
               <TextInput
                 style={styles.input}
                 textAlign={"left"}
-                secureTextEntry={true}
+                secureTextEntry={showPassword}
                 value={state.password}
                 onChangeText={(value) =>
-                  setstate((prevState) => ({ ...prevState, password: value }))
+                  setState((prevState) => ({ ...prevState, password: value }))
                 }
                 placeholder="Пароль"
                 placeholderTextColor={`#ff0000`}
                                     />
-                                    {/* <Button style={ styles.passwordBtn} title='Показать'/> */}
-                 <TouchableOpacity style={ styles.showPassword} >
+                                    
+                 <TouchableOpacity style={ styles.showPassword} onPress={putShowPassword}>
                          <Text>Показать</Text>               
                 </TouchableOpacity>
                    </View>
