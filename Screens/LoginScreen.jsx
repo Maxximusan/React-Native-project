@@ -10,7 +10,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
-//   Dimensions,
+
 } from "react-native";
 
 
@@ -23,7 +23,8 @@ export const LoginScreen = (props) => {
     const {dimensions} = props
     const [state, setstate] = useState(initialState);
     const [showPassword, setShowPassword] = useState(true)
-
+    const [showKeyboard, setShowKeyboard] = useState(false)
+    const [isFocused, setIsFocused] = useState({})
 
     const putShowPassword = () => {
         setShowPassword(prev => !prev)
@@ -34,7 +35,8 @@ export const LoginScreen = (props) => {
     const keyboardHide = () => {
     Keyboard.dismiss();
     console.log(state);
-    setstate(initialState);
+      setstate(initialState);
+      setShowKeyboard(false)
   };
 
     return (
@@ -55,20 +57,25 @@ export const LoginScreen = (props) => {
                     <View style={{ marginBottom: 16 }}>
               
                        <TextInput
-                       style={styles.input}
+                       style={isFocused.email ? styles.inputActive : styles.input}
                         textAlign={"left"}
                          value={state.email}
                            onChangeText={(value) =>
                           setstate((prevState) => ({ ...prevState, email: value }))
                           }
                           placeholder="Адресс электронной почты"
-                          placeholderTextColor={`#ff0000`}
+                      placeholderTextColor={`#ff0000`}
+                      onFocus={() => {
+                              setShowKeyboard(true);
+                            setIsFocused({email: true})
+                                        }}     
+                          onBlur={() => setIsFocused({})}
                          />
                     </View>
                   <View style={{ marginBottom: 43 }}>
               
               <TextInput
-                style={styles.input}
+                style={isFocused.password ? styles.inputActive : styles.input}
                 textAlign={"left"}
                 secureTextEntry={showPassword}
                 value={state.password}
@@ -76,11 +83,16 @@ export const LoginScreen = (props) => {
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
                 placeholder="Пароль"
-                placeholderTextColor={`#ff0000`}
+                 placeholderTextColor={`#ff0000`}
+                  onFocus={() => {
+                              setShowKeyboard(true);
+                            setIsFocused({password: true})
+                                        }}     
+                  onBlur={() => setIsFocused({})} 
                     />
                     
                     <TouchableOpacity style={ styles.showPassword} onPress={putShowPassword}>
-                         <Text>Показать</Text>               
+                         <Text>{ showPassword ? 'Показать' : 'Скрыть'}</Text>               
                 </TouchableOpacity>
                    </View>
              <TouchableOpacity
@@ -140,21 +152,37 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    borderWidth: 1,
-    borderColor: `#90ee90`,
-    // margin: 20,
+     fontFamily: "roboto-400",
+    fontSize: 16,
+    lineHeight: 19,
     height: 50,
-    borderRadius: 6,
-    color: `#212121`,
-    // outlineColor: "#FF6C00",
     paddingLeft: 16,
+     
+      borderWidth: 1,
+      borderColor: `#90ee90`,
+    borderRadius: 8,
+      backgroundColor: '#F6F6F6',
+      color: `#212121`,
+     
+    //   outLineColor: "#FF6C00",
+    // outLineWidth: 4,
+    // outLineStyle: "solid",
+    },
+    inputActive: {
+      fontFamily: "roboto-400",
+    fontSize: 16,
+    lineHeight: 19,
+    height: 50,
+    paddingLeft: 16,
+     
+      borderWidth: 1,
+      borderColor: `#FF6C00`,
+    borderRadius: 8,
+      backgroundColor: '#FFFFFF',
+      color: `#212121`,
   },
 
-  inputTitle: {
-    fontSize: 18,
-    marginBottom: 10,
-    color: `#ff4500`,
-  },
+  
 
   btn: {
     height: 51,
