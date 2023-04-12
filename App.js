@@ -46,8 +46,8 @@ export default function App() {
 
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
-      {/* <RegistrationScreen dimensions={dimensions} /> */}
-      <LoginScreen dimensions={dimensions} />
+      <RegistrationScreen dimensions={dimensions} />
+      {/* <LoginScreen dimensions={dimensions} /> */}
       <StatusBar style="auto" />
     </View>
   );
