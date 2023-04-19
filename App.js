@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useCallback } from "react";
+
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Dimensions } from "react-native";
-
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import { LoginScreen } from "./Screens/LoginScreen";
-import { RegistrationScreen } from "./Screens/RegistrationScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import { LoginScreen } from "./Screens/Auth/LoginScreen/LoginScreen";
+import { RegistrationScreen } from "./Screens/Auth/RegistrationScreen/RegistrationScreen";
+import { ContextDimensions } from "./context/context";
 
 SplashScreen.preventAutoHideAsync();
+
+const AuthStack = createStackNavigator();
 
 export default function App() {
   const [dimensions, setdimensions] = useState(
@@ -46,8 +52,17 @@ export default function App() {
 
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
-      <RegistrationScreen dimensions={dimensions} />
-      {/* <LoginScreen dimensions={dimensions} /> */}
+      <NavigationContainer>
+        <ContextDimensions.Provider value={{ dimensions }}>
+          <AuthStack.Navigator>
+            <AuthStack.Screen name="Register" component={RegistrationScreen} />
+            <AuthStack.Screen name="Login" component={LoginScreen} />
+          </AuthStack.Navigator>
+          {/* <RegistrationScreen dimensions={dimensions} /> */}
+          {/* <LoginScreen dimensions={dimensions} /> */}
+        </ContextDimensions.Provider>
+      </NavigationContainer>
+
       <StatusBar style="auto" />
     </View>
   );
