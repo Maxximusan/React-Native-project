@@ -21,7 +21,7 @@ const initialState = {
   password: "",
 };
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ navigation }) => {
   const { dimensions } = useContext(ContextDimensions);
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
@@ -132,9 +132,12 @@ export const RegistrationScreen = () => {
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
-                <View style={{ alignItems: "center" }}>
-                  <Text style={styles.noAkReg}>Уже есть аккаунт? Войти</Text>
-                </View>
+                <TouchableOpacity
+                  style={{ alignItems: "center" }}
+                  onPress={() => navigation.navigate("Login")}
+                >
+                  <Text style={styles.haveAcLog}>Уже есть аккаунт? Войти</Text>
+                </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
           </View>
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-500",
   },
 
-  noAkReg: {
+  haveAcLog: {
     fontFamily: "roboto-400",
     fontSize: 16,
     lineHeight: 19,

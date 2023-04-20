@@ -10,6 +10,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  Button,
 } from "react-native";
 
 import { ContextDimensions } from "../../../context/context";
@@ -19,7 +20,7 @@ const initialState = {
   password: "",
 };
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
   const { dimensions } = useContext(ContextDimensions);
   const [state, setstate] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
@@ -108,11 +109,14 @@ export const LoginScreen = () => {
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
-                <View style={{ alignItems: "center" }}>
+                <TouchableOpacity
+                  style={{ alignItems: "center" }}
+                  onPress={() => navigation.navigate("Register")}
+                >
                   <Text style={styles.noAkReg}>
                     Нет аккаунта? Зарегистрироваться
                   </Text>
-                </View>
+                </TouchableOpacity>
               </View>
             </KeyboardAvoidingView>
           </View>
