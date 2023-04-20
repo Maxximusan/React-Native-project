@@ -130,7 +130,7 @@ export const RegistrationScreen = ({ navigation }) => {
                   activeOpacity={0.4}
                   onPress={keyboardHide}
                 >
-                  <Text style={styles.btnTitle}>Войти</Text>
+                  <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{ alignItems: "center" }}

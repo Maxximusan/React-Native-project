@@ -7,6 +7,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { LoginScreen } from "./Screens/Auth/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./Screens/Auth/RegistrationScreen/RegistrationScreen";
@@ -15,6 +16,7 @@ import { ContextDimensions } from "./context/context";
 SplashScreen.preventAutoHideAsync();
 
 const AuthStack = createStackNavigator();
+const MainTab = createBottomTabNavigator();
 
 export default function App() {
   const [dimensions, setdimensions] = useState(
