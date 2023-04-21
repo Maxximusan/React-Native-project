@@ -12,13 +12,55 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { LoginScreen } from "./Screens/Auth/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./Screens/Auth/RegistrationScreen/RegistrationScreen";
 import { ContextDimensions } from "./context/context";
+import { CreatePostsScreen } from "./Screens/mainScreen/CreatePostsScreen";
+import { PostsScreen } from "./Screens/mainScreen/PostsScreen";
+import { ProfileScreen } from "./Screens/mainScreen/ProfileScreen";
 
 SplashScreen.preventAutoHideAsync();
 
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
+const useRoute = (isAuth) => {
+  if (!isAuth) {
+    return (
+      <AuthStack.Navigator>
+        <AuthStack.Screen
+          options={{ headerShown: false }}
+          name="Register"
+          component={RegistrationScreen}
+        />
+        <AuthStack.Screen
+          options={{ headerShown: false }}
+          name="Login"
+          component={LoginScreen}
+        />
+      </AuthStack.Navigator>
+    );
+  }
+  return (
+    <MainTab.Navigator>
+      <MainTab.Screen
+        name="Posts"
+        component={PostsScreen}
+        options={{ headerShown: false }}
+      />
+      <MainTab.Screen
+        name="Create"
+        component={CreatePostsScreen}
+        options={{ headerShown: false }}
+      />
+      <MainTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+    </MainTab.Navigator>
+  );
+};
+
 export default function App() {
+  const routing = useRoute(null);
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -56,20 +98,7 @@ export default function App() {
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
       <NavigationContainer>
         <ContextDimensions.Provider value={{ dimensions }}>
-          <AuthStack.Navigator>
-            <AuthStack.Screen
-              options={{ headerShown: false }}
-              name="Register"
-              component={RegistrationScreen}
-            />
-            <AuthStack.Screen
-              options={{ headerShown: false }}
-              name="Login"
-              component={LoginScreen}
-            />
-          </AuthStack.Navigator>
-          {/* <RegistrationScreen dimensions={dimensions} /> */}
-          {/* <LoginScreen dimensions={dimensions} /> */}
+          {routing}
         </ContextDimensions.Provider>
       </NavigationContainer>
 
