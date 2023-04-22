@@ -3,6 +3,8 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import { Feather, AntDesign } from "@expo/vector-icons";
+
 import { LoginScreen } from "./Screens/Auth/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./Screens/Auth/RegistrationScreen/RegistrationScreen";
 import { CreatePostsScreen } from "./Screens/mainScreen/CreatePostsScreen";
@@ -30,21 +32,36 @@ export const useRoute = (isAuth) => {
     );
   }
   return (
-    <MainTab.Navigator>
+    <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
       <MainTab.Screen
         name="Posts"
         component={PostsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <Feather name="grid" size={size} color={color} />
+          ),
+        }}
       />
       <MainTab.Screen
         name="Create"
         component={CreatePostsScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <AntDesign name="pluscircleo" size={size} color={color} />
+          ),
+        }}
       />
       <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ focused, color, size }) => (
+            <Feather name="user" size={size} color={color} />
+          ),
+        }}
       />
     </MainTab.Navigator>
   );

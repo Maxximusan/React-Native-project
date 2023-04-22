@@ -12,7 +12,7 @@ import { ContextDimensions } from "./context/context";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute(null);
+  const routing = useRoute({});
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
