@@ -34,9 +34,14 @@ export const RegistrationScreen = ({ navigation }) => {
 
   const keyboardHide = () => {
     Keyboard.dismiss();
+
+    setShowKeyboard(false);
+  };
+
+  const submitForm = () => {
     console.log(state);
     setState(initialState);
-    setShowKeyboard(false);
+    navigation.navigate("Home");
   };
 
   return (
@@ -128,7 +133,7 @@ export const RegistrationScreen = ({ navigation }) => {
                 <TouchableOpacity
                   style={styles.btn}
                   activeOpacity={0.4}
-                  onPress={keyboardHide}
+                  onPress={submitForm}
                 >
                   <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>

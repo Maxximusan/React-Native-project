@@ -1,18 +1,12 @@
 import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import { Feather, AntDesign } from "@expo/vector-icons";
 
 import { LoginScreen } from "./Screens/Auth/LoginScreen/LoginScreen";
 import { RegistrationScreen } from "./Screens/Auth/RegistrationScreen/RegistrationScreen";
-import { CreatePostsScreen } from "./Screens/mainScreen/CreatePostsScreen";
-import { PostsScreen } from "./Screens/mainScreen/PostsScreen";
-import { ProfileScreen } from "./Screens/mainScreen/ProfileScreen";
+import { HomeScreen } from "./Screens/mainScreen/HomeScreen";
 
 const AuthStack = createStackNavigator();
-const MainTab = createBottomTabNavigator();
 
 export const useRoute = (isAuth) => {
   if (!isAuth) {
@@ -28,41 +22,14 @@ export const useRoute = (isAuth) => {
           name="Login"
           component={LoginScreen}
         />
+        <AuthStack.Screen
+          options={{ headerShown: false }}
+          name="Home"
+          component={HomeScreen}
+        />
       </AuthStack.Navigator>
     );
+  } else {
+    return <HomeScreen />;
   }
-  return (
-    <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
-      <MainTab.Screen
-        name="Posts"
-        component={PostsScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => (
-            <Feather name="grid" size={size} color={color} />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Create"
-        component={CreatePostsScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => (
-            <AntDesign name="pluscircleo" size={size} color={color} />
-          ),
-        }}
-      />
-      <MainTab.Screen
-        name="Profile"
-        component={ProfileScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => (
-            <Feather name="user" size={size} color={color} />
-          ),
-        }}
-      />
-    </MainTab.Navigator>
-  );
 };
