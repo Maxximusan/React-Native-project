@@ -7,9 +7,9 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 
-import { CreatePostsScreen } from "./CreatePostsScreen";
-import { PostsScreen } from "./PostsScreen";
-import { ProfileScreen } from "./ProfileScreen";
+import { CreatePostsScreen } from "../mainScreens/CreatePostsScreen";
+import { PostsScreen } from "../mainScreens/PostsScreen";
+import { ProfileScreen } from "../mainScreens/ProfileScreen";
 
 const MainTab = createBottomTabNavigator();
 
