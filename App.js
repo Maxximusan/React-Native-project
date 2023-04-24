@@ -13,6 +13,8 @@ SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const routing = useRoute(null);
+
+  //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -36,6 +38,7 @@ export default function App() {
     };
   }, []);
 
+  //для подключения шрифтов
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -49,6 +52,7 @@ export default function App() {
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
       <NavigationContainer>
+       
         <ContextDimensions.Provider value={{ dimensions }}>
           {routing}
         </ContextDimensions.Provider>

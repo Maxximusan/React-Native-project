@@ -26,6 +26,7 @@ export const RegistrationScreen = ({ navigation }) => {
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  //Альтернатива outlineColor
   const [isFocused, setIsFocused] = useState({});
 
   const putShowPassword = () => {
@@ -33,6 +34,7 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const keyboardHide = () => {
+    //Возможность скрывать клавиатуру при нажатии вне формы
     Keyboard.dismiss();
 
     setShowKeyboard(false);
