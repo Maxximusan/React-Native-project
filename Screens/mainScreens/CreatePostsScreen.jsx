@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Camera } from "expo-camera";
+import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
+import * as MediaLibrary from "expo-media-library";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
   const [foto, setFoto] = useState(null);
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(CameraType.back);
 
   useEffect(() => {
     (async () => {
@@ -19,15 +23,41 @@ export const CreatePostsScreen = ({ navigation }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  const toogleCameraType = () => {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  };
+
   const takePhoto = async () => {
     const photo = await snap.takePictureAsync();
     const location = await Location.getCurrentPositionAsync();
+    toogleCameraType();
+    const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
     console.log("location", location);
     console.log("lalitude", location.coords.latitude);
     console.log("longitude", location.coords.longitude);
     setFoto(photo.uri);
     // console.log("camera ---->", photo.uri);
     console.log("photo", photo);
+    console.log("SAVEphoto", savePhoto);
+    // console.log("photoURI", photo.uri);
   };
 
   const sendPhoto = () => {
