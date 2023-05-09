@@ -62,7 +62,7 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const sendPhoto = () => {
     console.log("navigation", navigation);
-    navigation.navigate("Публикации", { foto });
+    navigation.navigate("DefaultScreen", { foto });
   };
 
   return (

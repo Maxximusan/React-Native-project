@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   showPassword: {
     position: "absolute",
     top: 15,
-    left: 300,
+    left: 295,
     // backgroundColor: '#FF6C00',
     // color: "#FFF",
     width: 71,
