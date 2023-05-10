@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  KeyboardAvoidingView,
+} from "react-native";
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 import * as MediaLibrary from "expo-media-library";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
@@ -67,24 +76,48 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} ref={setSnap}>
-        {foto && (
-          <View style={styles.takePhotoContainer}>
-            <Image
-              source={{ uri: foto }}
-              style={{ height: 150, width: 150, borderRadius: 10 }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={213}
+      >
+        <Camera style={styles.camera} ref={setSnap}>
+          {foto && (
+            <View style={styles.takePhotoContainer}>
+              <Image
+                source={{ uri: foto }}
+                style={{ height: 120, width: 120, borderRadius: 10 }}
+              />
+            </View>
+          )}
+          <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
+            {/* <Text style={styles.snap}> SNAP </Text> */}
+            <FontAwesome5 name="camera-retro" size={40} color="pink" />
+          </TouchableOpacity>
+        </Camera>
+        <View style={styles.form}>
+          <View style={{ marginBottom: 32 }}>
+            <TextInput
+              style={styles.input}
+              textAlign={"left"}
+              placeholder="Название..."
+              placeholderTextColor={`#ff0000`}
             />
           </View>
-        )}
-        <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
-          <Text style={styles.snap}> SNAP </Text>
-        </TouchableOpacity>
-      </Camera>
-      <View>
-        <TouchableOpacity style={styles.sendBtn} onPress={sendPhoto}>
-          <Text style={styles.sendTitle}> SEND </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={{ marginBottom: 32 }}>
+            <TextInput
+              style={styles.input}
+              textAlign={"left"}
+              placeholder="Местность..."
+              placeholderTextColor={`#ff0000`}
+            />
+          </View>
+        </View>
+        <View>
+          <TouchableOpacity style={styles.sendBtn} onPress={sendPhoto}>
+            <Text style={styles.sendTitle}> Опубликовать </Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -95,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   camera: {
-    height: "70%",
+    height: "50%",
     marginHorizontal: 16,
     marginTop: 32,
     borderRadius: 10,
@@ -105,7 +138,8 @@ const styles = StyleSheet.create({
 
   snapContainer: {
     borderWidth: 1,
-    borderColor: "#ff0000",
+    borderColor: `#ee82ee`,
+    backgroundColor: "rgba(119, 108, 108, 0.178)",
     borderRadius: 50,
     width: 70,
     height: 70,
@@ -114,9 +148,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  snap: {
-    color: "#fff",
-  },
+  // snap: {
+  //   color: "#fff",
+  // },
 
   takePhotoContainer: {
     position: "absolute",
@@ -132,13 +166,33 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 2,
     borderColor: `#7fff00`,
-    borderRadius: 10,
-    marginTop: 20,
+    backgroundColor: `#32cd32`,
+    borderRadius: 15,
+    // marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
   },
   sendTitle: {
-    color: `#7fff00`,
+    color: `#ffd700`,
     fontSize: 20,
+  },
+  form: {
+    // backgroundColor: "#8f7474",
+    paddingHorizontal: 16,
+    marginTop: 45,
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
+  input: {
+    fontFamily: "roboto-400",
+    fontSize: 16,
+    lineHeight: 19,
+    paddingLeft: 16,
+
+    borderWidth: 1,
+    borderColor: "transparent",
+    borderBottomColor: "#E8E8E8",
+
+    color: `#212121`,
   },
 });
