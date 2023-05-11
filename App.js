@@ -5,9 +5,11 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
+import { Provider } from "react-redux";
 
 import { useRoute } from "./router";
 import { ContextDimensions } from "./context/context";
+import { store } from "./redux/store";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -51,13 +53,13 @@ export default function App() {
 
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
-      <NavigationContainer>
-       
-        <ContextDimensions.Provider value={{ dimensions }}>
-          {routing}
-        </ContextDimensions.Provider>
-      </NavigationContainer>
-
+      <Provider store={store}>
+        <NavigationContainer>
+          <ContextDimensions.Provider value={{ dimensions }}>
+            {routing}
+          </ContextDimensions.Provider>
+        </NavigationContainer>
+      </Provider>
       <StatusBar style="auto" />
     </View>
   );
