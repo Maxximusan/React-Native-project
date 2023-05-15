@@ -12,8 +12,10 @@ import {
   KeyboardAvoidingView,
   Image,
 } from "react-native";
+import { useDispatch } from "react-redux";
 
 import { ContextDimensions } from "../../../context/context";
+import { authRegistrationUser } from "../../../redux/auth/authOperations";
 
 const initialState = {
   login: "",
@@ -28,6 +30,7 @@ export const RegistrationScreen = ({ navigation }) => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   //Альтернатива outlineColor
   const [isFocused, setIsFocused] = useState({});
+  const dispatch = useDispatch();
 
   const putShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -43,6 +46,7 @@ export const RegistrationScreen = ({ navigation }) => {
   const submitForm = () => {
     console.log(state);
     setState(initialState);
+    dispatch(authRegistrationUser(state));
     navigation.navigate("Home");
   };
 
