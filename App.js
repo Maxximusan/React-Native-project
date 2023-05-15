@@ -14,7 +14,7 @@ import { store } from "./redux/store";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute(null);
+  const routing = useRoute(false);
 
   //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(

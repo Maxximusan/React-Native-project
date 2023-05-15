@@ -55,7 +55,7 @@ export const RegistrationScreen = ({ navigation }) => {
         >
           <View style={styles.formContainer}>
             <KeyboardAvoidingView
-              behavior={"height"}
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
               keyboardVerticalOffset={80}
             >
               <View style={{ ...styles.form, width: dimensions }}>
