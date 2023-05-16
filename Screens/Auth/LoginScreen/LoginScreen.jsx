@@ -13,6 +13,9 @@ import {
   Button,
 } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { authLogInUser } from "../../../redux/auth/authOperations";
+
 import { ContextDimensions } from "../../../context/context";
 
 const initialState = {
@@ -26,6 +29,7 @@ export const LoginScreen = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [isFocused, setIsFocused] = useState({});
+  const dispatch = useDispatch();
 
   const putShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -38,8 +42,9 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const submitForm = () => {
-    console.log(state);
+    console.log("authLoginSubmit", state);
     setState(initialState);
+    dispatch(authLogInUser(state));
     navigation.navigate("Home");
   };
 

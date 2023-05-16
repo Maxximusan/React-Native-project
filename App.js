@@ -10,11 +10,19 @@ import { Provider } from "react-redux";
 import { useRoute } from "./router";
 import { ContextDimensions } from "./context/context";
 import { store } from "./redux/store";
+import { auth } from "./firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const routing = useRoute(false);
+  const [checkUser, setCheckUser] = useState(null);
+  onAuthStateChanged(auth, (user) => {
+    setCheckUser(user);
+    console.log("checkUser", user);
+  });
+
+  const routing = useRoute(checkUser);
 
   //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(
