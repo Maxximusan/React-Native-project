@@ -44,7 +44,7 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const submitForm = () => {
-    console.log('authRegisterUser', state);
+    console.log("authRegisterUser", state);
     setState(initialState);
     dispatch(authRegistrationUser(state));
     navigation.navigate("Home");

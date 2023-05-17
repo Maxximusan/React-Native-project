@@ -4,25 +4,29 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { NavigationContainer } from "@react-navigation/native";
+// import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 
-import { useRoute } from "./router";
+// import { useRoute } from "./router";
 import { ContextDimensions } from "./context/context";
 import { store } from "./redux/store";
-import { auth } from "./firebase/config";
-import { onAuthStateChanged } from "firebase/auth";
+// import { auth } from "./firebase/config";
+// import { onAuthStateChanged } from "firebase/auth";
+import { Main } from "./components/Main";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [checkUser, setCheckUser] = useState(null);
-  onAuthStateChanged(auth, (user) => {
-    setCheckUser(user);
-    console.log("checkUser", user);
-  });
+  // const [checkUser, setCheckUser] = useState(null);
+  // // const state = useSelector((state) => state);
+  // // console.log(state);
 
-  const routing = useRoute(checkUser);
+  // onAuthStateChanged(auth, (user) => {
+  //   setCheckUser(user);
+  //   console.log("checkUser", user);
+  // });
+
+  // const routing = useRoute(checkUser);
 
   //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(
@@ -62,11 +66,9 @@ export default function App() {
   return (
     <View style={styles.mainContainer} onLayout={onLayoutRootView}>
       <Provider store={store}>
-        <NavigationContainer>
-          <ContextDimensions.Provider value={{ dimensions }}>
-            {routing}
-          </ContextDimensions.Provider>
-        </NavigationContainer>
+        <ContextDimensions.Provider value={{ dimensions }}>
+          <Main />
+        </ContextDimensions.Provider>
       </Provider>
       <StatusBar style="auto" />
     </View>
