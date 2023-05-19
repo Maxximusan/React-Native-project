@@ -7,13 +7,22 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 
+import { useDispatch } from "react-redux";
+
 import { CreatePostsScreen } from "../mainScreens/CreatePostsScreen";
 import { PostsScreen } from "../mainScreens/PostsScreen";
 import { ProfileScreen } from "../mainScreens/ProfileScreen";
+import { authLogOutUser } from "../../redux/auth/authOperations";
 
 const MainTab = createBottomTabNavigator();
 
 export const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  const logOut = () => {
+    dispatch(authLogOutUser());
+  };
+
   return (
     <MainTab.Navigator screenOptions={{ tabBarShowLabel: false }}>
       <MainTab.Screen
@@ -28,7 +37,7 @@ export const HomeScreen = ({ navigation }) => {
               size={24}
               color="#BDBDBD"
               style={{ marginRight: 20 }}
-              onPress={() => navigation.navigate("Login")}
+              onPress={logOut}
             />
           ),
           tabBarIcon: ({ focused, color, size }) => (
