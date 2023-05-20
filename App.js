@@ -1,33 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
-
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-// import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 
-// import { useRoute } from "./router";
+
 import { ContextDimensions } from "./context/context";
 import { store } from "./redux/store";
-// import { auth } from "./firebase/config";
-// import { onAuthStateChanged } from "firebase/auth";
 import { Main } from "./components/Main";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  // const [checkUser, setCheckUser] = useState(null);
-  // // const state = useSelector((state) => state);
-  // // console.log(state);
-
-  // onAuthStateChanged(auth, (user) => {
-  //   setCheckUser(user);
-  //   console.log("checkUser", user);
-  // });
-
-  // const routing = useRoute(checkUser);
-
+  
   //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2

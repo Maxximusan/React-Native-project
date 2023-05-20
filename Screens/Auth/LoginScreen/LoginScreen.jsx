@@ -45,7 +45,7 @@ export const LoginScreen = ({ navigation }) => {
     console.log("authLoginSubmit", state);
     setState(initialState);
     dispatch(authLogInUser(state));
-    navigation.navigate("Home");
+    
   };
 
   return (

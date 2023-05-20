@@ -47,7 +47,7 @@ export const RegistrationScreen = ({ navigation }) => {
     console.log("authRegisterUser", state);
     setState(initialState);
     dispatch(authRegistrationUser(state));
-    navigation.navigate("Home");
+   
   };
 
   return (

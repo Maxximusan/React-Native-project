@@ -13,6 +13,8 @@ import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 import * as MediaLibrary from "expo-media-library";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { storage } from "../../firebase/config";
+import { ref, uploadBytes } from "firebase/storage";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
@@ -70,8 +72,19 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
+    uploadPhotoToServer();
     console.log("navigation", navigation);
     navigation.navigate("DefaultScreen", { foto });
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(foto);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+    const storageRef = ref(storage, `postImage/${uniquePostId}`);
+    console.log("storageRef", storageRef);
+    const data = await uploadBytes(storageRef, file);
+    console.log("data", data);
   };
 
   return (
