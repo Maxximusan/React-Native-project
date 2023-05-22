@@ -19,6 +19,8 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
   const [foto, setFoto] = useState(null);
+  const [comment, setComment] = useState("");
+  const [location, setLocation] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(CameraType.back);
@@ -31,6 +33,8 @@ export const CreatePostsScreen = ({ navigation }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
     })();
   }, []);
 
@@ -119,6 +123,7 @@ export const CreatePostsScreen = ({ navigation }) => {
               textAlign={"left"}
               placeholder="Название..."
               placeholderTextColor={`#ff0000`}
+              onChangeText={setComment}
             />
           </View>
           <View style={{ marginBottom: 32 }}>
