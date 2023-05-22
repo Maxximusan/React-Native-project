@@ -14,7 +14,7 @@ import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { storage } from "../../firebase/config";
-import { ref, uploadBytes } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
@@ -85,6 +85,11 @@ export const CreatePostsScreen = ({ navigation }) => {
     console.log("storageRef", storageRef);
     const data = await uploadBytes(storageRef, file);
     console.log("data", data);
+
+    const processedPhoto = await getDownloadURL(
+      ref(storage, `postImage/${uniquePostId}`)
+    );
+    console.log("processedPhoto", processedPhoto);
   };
 
   return (
