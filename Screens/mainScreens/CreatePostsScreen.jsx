@@ -13,8 +13,10 @@ import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 import * as MediaLibrary from "expo-media-library";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { storage } from "../../firebase/config";
+import { storage, firestoreDB } from "../../firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
@@ -25,6 +27,8 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(CameraType.back);
 
+  const { userId, nickName, userEmail } = useSelector((state) => state.auth);
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -33,8 +37,8 @@ export const CreatePostsScreen = ({ navigation }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      let locationRes = await Location.getCurrentPositionAsync({});
+      setLocation(locationRes);
     })();
   }, []);
 
@@ -62,7 +66,7 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const takePhoto = async () => {
     const photo = await snap.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
+    // const location = await Location.getCurrentPositionAsync();
     toogleCameraType();
     const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
     console.log("location", location);
@@ -73,12 +77,31 @@ export const CreatePostsScreen = ({ navigation }) => {
     console.log("photo", photo);
     console.log("SAVEphoto", savePhoto);
     // console.log("photoURI", photo.uri);
+    console.log("comment", comment);
   };
 
   const sendPhoto = () => {
-    uploadPhotoToServer();
+    // uploadPhotoToServer();
+    uploadPostToServer();
     console.log("navigation", navigation);
     navigation.navigate("DefaultScreen", { foto });
+  };
+
+  const uploadPostToServer = async () => {
+    const createdPhoto = await uploadPhotoToServer();
+    try {
+      const createPost = await addDoc(collection(firestoreDB, "posts"), {
+        photo: createdPhoto,
+        comment,
+        location: location.coords,
+        userId,
+        nickName,
+        userEmail,
+      });
+      console.log("Document written with ID: ", createPost.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
 
   const uploadPhotoToServer = async () => {
@@ -94,6 +117,8 @@ export const CreatePostsScreen = ({ navigation }) => {
       ref(storage, `postImage/${uniquePostId}`)
     );
     console.log("processedPhoto", processedPhoto);
+
+    return processedPhoto;
   };
 
   return (
