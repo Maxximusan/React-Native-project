@@ -1,15 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, StyleSheet, FlatList, Button } from "react-native";
 
+import { collection, onSnapshot } from "firebase/firestore";
+import { firestoreDB } from "../../firebase/config";
+
 export const DefaultScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
-  console.log("route.params", route.params);
+  // console.log("route.params", route.params);
+
+  const getAllPost = async () => {
+    await onSnapshot(
+      collection(firestoreDB, "posts"),
+      (snapshot) => {
+        setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getAllPost();
+  }, []);
+
+  // useEffect(() => {
+  //   if (route.params) {
+  //     setPosts((prevState) => [...prevState, route.params]);
+  //   }
+  // }, [route.params]);
   console.log("posts", posts);
   return (
     <View style={styles.container}>
@@ -25,7 +44,7 @@ export const DefaultScreen = ({ route, navigation }) => {
             }}
           >
             <Image
-              source={{ uri: item.foto }}
+              source={{ uri: item.photo }}
               style={{ width: 350, height: 200 }}
             />
           </View>
