@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, StyleSheet, FlatList, Button } from "react-native";
+import { View, Image, StyleSheet, FlatList, Button, Text } from "react-native";
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
@@ -47,13 +47,23 @@ export const DefaultScreen = ({ route, navigation }) => {
               source={{ uri: item.photo }}
               style={{ width: 350, height: 200 }}
             />
+            <View>
+              <Text>{item.comment}</Text>
+            </View>
+            <View>
+              <Button
+                title="go to Map"
+                onPress={() =>
+                  navigation.navigate("Map", { location: item.location })
+                }
+              />
+              <Button
+                title="go to Comments"
+                onPress={() => navigation.navigate("Comments")}
+              />
+            </View>
           </View>
         )}
-      />
-      <Button title="go to Map" onPress={() => navigation.navigate("Map")} />
-      <Button
-        title="go to Comments"
-        onPress={() => navigation.navigate("Comments")}
       />
     </View>
   );

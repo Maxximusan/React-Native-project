@@ -83,8 +83,10 @@ export const CreatePostsScreen = ({ navigation }) => {
   const sendPhoto = () => {
     // uploadPhotoToServer();
     uploadPostToServer();
+
     console.log("navigation", navigation);
     navigation.navigate("DefaultScreen");
+    setComment("");
   };
 
   const uploadPostToServer = async () => {
@@ -148,6 +150,7 @@ export const CreatePostsScreen = ({ navigation }) => {
               textAlign={"left"}
               placeholder="Название..."
               placeholderTextColor={`#ff0000`}
+              value={comment}
               onChangeText={setComment}
             />
           </View>
