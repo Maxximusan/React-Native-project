@@ -48,6 +48,9 @@ export const CommentScreen = ({ route }) => {
         setAllComments(
           snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
+      },
+      (error) => {
+        console.log(error);
       }
     );
   };
