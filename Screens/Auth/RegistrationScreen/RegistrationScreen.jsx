@@ -16,11 +16,14 @@ import { useDispatch } from "react-redux";
 
 import { ContextDimensions } from "../../../context/context";
 import { authRegistrationUser } from "../../../redux/auth/authOperations";
+import { UserAvatar } from "../../../components/AvatarBox/UserAvatar";
+import { pickImageAsync } from "../../../helpers/imagePicker";
 
 const initialState = {
   login: "",
   email: "",
   password: "",
+  avatar: null,
 };
 
 export const RegistrationScreen = ({ navigation }) => {
@@ -31,6 +34,11 @@ export const RegistrationScreen = ({ navigation }) => {
   //Альтернатива outlineColor
   const [isFocused, setIsFocused] = useState({});
   const dispatch = useDispatch();
+
+  const getUserFoto = async () => {
+    const result = await pickImageAsync();
+    setState((prevState) => ({ ...prevState, avatar: result }));
+  };
 
   const putShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -47,9 +55,8 @@ export const RegistrationScreen = ({ navigation }) => {
     console.log("authRegisterUser", state);
     setState(initialState);
     dispatch(authRegistrationUser(state));
-   
   };
-
+  // console.log(state);
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
@@ -63,10 +70,7 @@ export const RegistrationScreen = ({ navigation }) => {
               keyboardVerticalOffset={80}
             >
               <View style={{ ...styles.form, width: dimensions }}>
-                <View style={styles.userFotoContainer}></View>
-                <TouchableOpacity style={styles.addFoto}>
-                  <Image source={require("../../../assets/images/Union.jpg")} />
-                </TouchableOpacity>
+                <UserAvatar getUserPhoto={getUserFoto} avatar={state.avatar} />
                 <View style={styles.header}>
                   <Text style={styles.headerTitle}>Регистрация</Text>
                 </View>
@@ -262,28 +266,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
   },
 
-  userFotoContainer: {
-    position: "absolute",
-    top: -150,
-    left: 130,
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    backgroundColor: "#F6F6F6",
-  },
-  addFoto: {
-    position: "absolute",
-    top: -75,
-    left: 235,
-    width: 25,
-    height: 25,
-    // backgroundColor: '#FF6C00',
-    borderRadius: 16,
-    borderColor: "#FF6C00",
-    borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   showPassword: {
     position: "absolute",
     top: 15,

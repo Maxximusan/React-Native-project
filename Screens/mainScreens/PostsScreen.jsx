@@ -13,7 +13,11 @@ export const PostsScreen = () => {
       <NestedScreens.Screen
         name="DefaultScreen"
         component={DefaultScreen}
-        options={{ headerTitleAlign: "center", headerLeft: () => null }}
+        options={{
+          headerShown: false,
+          headerTitleAlign: "center",
+          headerLeft: () => null,
+        }}
       />
       <NestedScreens.Screen name="Map" component={MapScreen} />
       <NestedScreens.Screen name="Comments" component={CommentScreen} />

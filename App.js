@@ -5,7 +5,6 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { Provider } from "react-redux";
 
-
 import { ContextDimensions } from "./context/context";
 import { store } from "./redux/store";
 import { Main } from "./components/Main";
@@ -13,7 +12,6 @@ import { Main } from "./components/Main";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  
   //позволяет определить ширину экрана
   const [dimensions, setdimensions] = useState(
     Dimensions.get("window").width - 16 * 2
