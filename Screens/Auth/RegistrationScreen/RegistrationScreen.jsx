@@ -56,7 +56,6 @@ export const RegistrationScreen = ({ navigation }) => {
     setState(initialState);
     dispatch(authRegistrationUser(state));
   };
-  // console.log(state);
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>

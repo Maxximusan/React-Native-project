@@ -8,7 +8,7 @@ export const UserAvatar = (props) => {
       {avatar && <Image style={styles.userAvatar} source={{ uri: avatar }} />}
       <TouchableOpacity style={styles.addAvatar} onPress={() => getUserPhoto()}>
         <AntDesign
-          //   style={styles.addAvatarIcon}
+          style={avatar ? styles.icon : styles.iconn}
           name="pluscircleo"
           size={24}
           color={"#FF6C00"}
@@ -17,13 +17,6 @@ export const UserAvatar = (props) => {
     </View>
   );
 };
-
-{
-  /* <View style={styles.userAvatarContainer}></View>
-                <TouchableOpacity style={styles.addFoto}>
-                  <Image source={require("../../../assets/images/Union.jpg")} />
-                </TouchableOpacity> */
-}
 
 const styles = StyleSheet.create({
   userAvatarContainer: {
@@ -38,23 +31,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
   },
   addAvatar: {
-    //   position: "absolute",
-    //   top: -75,
-    //   left: 235,
-    //   width: 25,
-    //   height: 25,
-    //   // backgroundColor: '#FF6C00',
-    //   borderRadius: 16,
-    //   borderColor: "#FF6C00",
-    //   borderWidth: 1,
-    //   alignItems: "center",
-    //   justifyContent: "center",
     position: "absolute",
     top: 75,
     left: 107,
     width: 25,
     height: 25,
-    borderRadius: 16,
+    borderRadius: 36,
     // backgroundColor: "#F6F6F6",
   },
   userAvatar: {
@@ -62,9 +44,14 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 16,
   },
-  //   addAvatarIcon: {
-  //     // position: "absolute",
-  //     //     top: -45,
-  //     // left: 107,
-  //   },
+
+  icon: {
+    transform: [{ rotate: "45deg" }],
+    backgroundColor: "#E8E8E8",
+    color: "#7e7673",
+    borderRadius: 16,
+  },
+  iconn: {
+    color: "#FF6C00",
+  },
 });
