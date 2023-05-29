@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   FlatList,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { collection, addDoc, onSnapshot } from "firebase/firestore";
@@ -73,20 +74,25 @@ export const CommentScreen = ({ route }) => {
           keyExtractor={(item) => item.id}
         />
       </SafeAreaView>
-      <View style={{ marginBottom: 32 }}>
-        <TextInput
-          style={styles.input}
-          textAlign={"left"}
-          placeholder="Коментарий"
-          placeholderTextColor={`#ff0000`}
-          value={comment}
-          onChangeText={setComment}
-        />
-      </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={25}
+      >
+        <View style={{ marginBottom: 32 }}>
+          <TextInput
+            style={styles.input}
+            textAlign={"left"}
+            placeholder="Коментарий"
+            placeholderTextColor={`#ff0000`}
+            value={comment}
+            onChangeText={setComment}
+          />
+        </View>
 
-      <TouchableOpacity style={styles.sendBtn} onPress={submitAddComment}>
-        <Text style={styles.sendTitle}> Добавить коментарий </Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.sendBtn} onPress={submitAddComment}>
+          <Text style={styles.sendTitle}> Добавить коментарий </Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -124,6 +130,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     paddingLeft: 16,
     marginHorizontal: 10,
+    paddingTop: 10,
     borderWidth: 1,
     borderColor: "transparent",
     borderBottomColor: "#E8E8E8",

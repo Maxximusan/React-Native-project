@@ -35,9 +35,14 @@ export const RegistrationScreen = ({ navigation }) => {
   const [isFocused, setIsFocused] = useState({});
   const dispatch = useDispatch();
 
-  const getUserFoto = async () => {
+  const getAvatarFoto = async () => {
     const result = await pickImageAsync();
     setState((prevState) => ({ ...prevState, avatar: result }));
+  };
+
+  const deleteFoto = () => {
+    
+    setState((prevState) => ({ ...prevState, avatar: null}));
   };
 
   const putShowPassword = () => {
@@ -69,7 +74,11 @@ export const RegistrationScreen = ({ navigation }) => {
               keyboardVerticalOffset={80}
             >
               <View style={{ ...styles.form, width: dimensions }}>
-                <UserAvatar getUserPhoto={getUserFoto} avatar={state.avatar} />
+                <UserAvatar
+                  getAvatarPhoto={getAvatarFoto}
+                  avatar={state.avatar}
+                  deletePhoto={deleteFoto}
+                />
                 <View style={styles.header}>
                   <Text style={styles.headerTitle}>Регистрация</Text>
                 </View>

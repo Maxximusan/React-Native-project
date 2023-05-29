@@ -2,19 +2,36 @@ import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 export const UserAvatar = (props) => {
-  const { getUserPhoto, avatar } = props;
+  const { getAvatarPhoto, avatar, deletePhoto } = props;
   return (
-    <View style={styles.userAvatarContainer}>
-      {avatar && <Image style={styles.userAvatar} source={{ uri: avatar }} />}
-      <TouchableOpacity style={styles.addAvatar} onPress={() => getUserPhoto()}>
-        <AntDesign
-          style={avatar ? styles.icon : styles.iconn}
-          name="pluscircleo"
-          size={24}
-          color={"#FF6C00"}
-        />
-      </TouchableOpacity>
-    </View>
+    <>
+      {avatar ? (
+        <View style={styles.userAvatarContainer}>
+          <Image style={styles.userAvatar} source={{ uri: avatar }} />
+          <TouchableOpacity
+            style={styles.addAvatar}
+            onPress={() => deletePhoto()}
+          >
+            <AntDesign
+              style={styles.iconDel}
+              name="pluscircleo"
+              size={24}
+              color={"#7e7673"}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.userAvatarContainer}>
+          <Image style={styles.userAvatar} source={null} />
+          <TouchableOpacity
+            style={styles.addAvatar}
+            onPress={() => getAvatarPhoto()}
+          >
+            <AntDesign name="pluscircleo" size={24} color={"#FF6C00"} />
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
   );
 };
 
@@ -45,13 +62,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
 
-  icon: {
+  iconDel: {
     transform: [{ rotate: "45deg" }],
     backgroundColor: "#E8E8E8",
-    color: "#7e7673",
     borderRadius: 16,
-  },
-  iconn: {
-    color: "#FF6C00",
   },
 });
