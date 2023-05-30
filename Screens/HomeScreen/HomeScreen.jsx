@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Feather,
@@ -17,6 +18,7 @@ import { authLogOutUser } from "../../redux/auth/authOperations";
 const MainTab = createBottomTabNavigator();
 
 export const HomeScreen = ({ navigation }) => {
+  const navigationForIcon = useNavigation();
   const dispatch = useDispatch();
 
   const logOut = () => {
@@ -56,6 +58,7 @@ export const HomeScreen = ({ navigation }) => {
               size={24}
               color="#3b3636"
               style={{ marginLeft: 20 }}
+              onPress={() => navigationForIcon.goBack()}
             />
           ),
           tabBarIcon: ({ focused, color, size }) => (

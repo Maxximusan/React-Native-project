@@ -12,7 +12,7 @@ import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
 import * as MediaLibrary from "expo-media-library";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, SimpleLineIcons, FontAwesome } from "@expo/vector-icons";
 import { storage, firestoreDB } from "../../firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
@@ -22,6 +22,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [snap, setSnap] = useState(null);
   const [foto, setFoto] = useState(null);
   const [comment, setComment] = useState("");
+  const [terrain, setTerrain] = useState("");
   const [location, setLocation] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
@@ -65,19 +66,25 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const takePhoto = async () => {
-    const photo = await snap.takePictureAsync();
-    // const location = await Location.getCurrentPositionAsync();
-    toogleCameraType();
-    const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
-    console.log("location", location);
-    console.log("lalitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
-    setFoto(photo.uri);
-    // console.log("camera ---->", photo.uri);
-    console.log("photo", photo);
-    console.log("SAVEphoto", savePhoto);
-    // console.log("photoURI", photo.uri);
-    console.log("comment", comment);
+    try {
+      const photo = await snap.takePictureAsync();
+      // const location = await Location.getCurrentPositionAsync();
+
+      const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
+      console.log("location", location);
+      // console.log("lalitude", location.coords.latitude);
+      // console.log("longitude", location.coords.longitude);
+      setFoto(photo.uri);
+      console.log("camera ---->", snap);
+      console.log("photo", photo);
+      console.log("SAVEphoto", savePhoto);
+      // console.log("photoURI", photo.uri);
+      console.log("comment", comment);
+      console.log("terrain", terrain);
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+    }
   };
 
   const sendPhoto = () => {
@@ -87,6 +94,7 @@ export const CreatePostsScreen = ({ navigation }) => {
     console.log("navigation", navigation);
     navigation.navigate("DefaultScreen");
     setComment("");
+    setTerrain("");
   };
 
   const uploadPostToServer = async () => {
@@ -129,7 +137,7 @@ export const CreatePostsScreen = ({ navigation }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={213}
       >
-        <Camera style={styles.camera} ref={setSnap}>
+        <Camera style={styles.camera} type={type} ref={setSnap}>
           {foto && (
             <View style={styles.takePhotoContainer}>
               <Image
@@ -139,8 +147,13 @@ export const CreatePostsScreen = ({ navigation }) => {
             </View>
           )}
           <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
-            {/* <Text style={styles.snap}> SNAP </Text> */}
             <FontAwesome5 name="camera-retro" size={40} color="pink" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.changeCamera}
+            onPress={() => toogleCameraType()}
+          >
+            <FontAwesome name="exchange" size={30} color="white" />
           </TouchableOpacity>
         </Camera>
         <View style={styles.form}>
@@ -151,15 +164,27 @@ export const CreatePostsScreen = ({ navigation }) => {
               placeholder="Название..."
               placeholderTextColor={`#ff0000`}
               value={comment}
-              onChangeText={setComment}
+              onChangeText={(text) => {
+                setComment(text);
+              }}
             />
           </View>
           <View style={{ marginBottom: 32 }}>
+            <SimpleLineIcons
+              style={styles.terrainIcon}
+              name="location-pin"
+              size={24}
+              color="#BDBDBD"
+            />
             <TextInput
               style={styles.input}
               textAlign={"left"}
               placeholder="Местность..."
               placeholderTextColor={`#ff0000`}
+              value={terrain}
+              onChangeText={(text) => {
+                setTerrain(text);
+              }}
             />
           </View>
         </View>
@@ -238,12 +263,20 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-400",
     fontSize: 16,
     lineHeight: 19,
-    paddingLeft: 16,
+    paddingLeft: 24,
 
     borderWidth: 1,
     borderColor: "transparent",
     borderBottomColor: "#E8E8E8",
 
     color: `#212121`,
+  },
+  terrainIcon: {
+    position: "absolute",
+  },
+  changeCamera: {
+    position: "absolute",
+    left: 323,
+    top: 10,
   },
 });
