@@ -26,9 +26,12 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [location, setLocation] = useState(null);
 
   const [hasPermission, setHasPermission] = useState(null);
+
   const [type, setType] = useState(CameraType.back);
 
-  const { userId, nickName, userEmail } = useSelector((state) => state.auth);
+  const { userId, nickName, userEmail, userPhoto } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     (async () => {
@@ -46,6 +49,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
+
       await MediaLibrary.requestPermissionsAsync();
 
       setHasPermission(status === "granted");
@@ -68,19 +72,18 @@ export const CreatePostsScreen = ({ navigation }) => {
   const takePhoto = async () => {
     try {
       const photo = await snap.takePictureAsync();
-      // const location = await Location.getCurrentPositionAsync();
+      const location = await Location.getCurrentPositionAsync();
 
       const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
       console.log("location", location);
       // console.log("lalitude", location.coords.latitude);
       // console.log("longitude", location.coords.longitude);
       setFoto(photo.uri);
-      console.log("camera ---->", snap);
+
       console.log("photo", photo);
       console.log("SAVEphoto", savePhoto);
-      // console.log("photoURI", photo.uri);
-      console.log("comment", comment);
-      console.log("terrain", terrain);
+
+      setLocation(location);
     } catch (error) {
       console.log(error);
       console.log(error.message);
@@ -88,7 +91,6 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const sendPhoto = () => {
-    // uploadPhotoToServer();
     uploadPostToServer();
 
     console.log("navigation", navigation);
@@ -103,10 +105,13 @@ export const CreatePostsScreen = ({ navigation }) => {
       const createPost = await addDoc(collection(firestoreDB, "posts"), {
         photo: createdPhoto,
         comment,
+        terrain,
         location: location.coords,
         userId,
         nickName,
         userEmail,
+        userPhoto,
+        commentsAmount: 0,
       });
       console.log("Document written with ID: ", createPost.id);
     } catch (error) {
@@ -223,10 +228,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
-  // snap: {
-  //   color: "#fff",
-  // },
 
   takePhotoContainer: {
     position: "absolute",

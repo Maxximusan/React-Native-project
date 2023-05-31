@@ -10,7 +10,13 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { collection, addDoc, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
 
 export const CommentScreen = ({ route }) => {
@@ -20,11 +26,20 @@ export const CommentScreen = ({ route }) => {
 
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
+  const [commentsAmount, setCommentsAmount] = useState(0);
   const { nickName } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getAllPosts();
   }, []);
+
+  useEffect(() => {
+    updateCommentsAmount(allComments.length);
+  }, [allComments]);
+
+  useEffect(() => {
+    updateCommentsAmountForFirestore();
+  }, [commentsAmount]);
 
   const createComment = async () => {
     try {
@@ -60,6 +75,16 @@ export const CommentScreen = ({ route }) => {
     await createComment();
     setComment("");
   };
+
+  const updateCommentsAmount = (allComments) => {
+    setCommentsAmount(allComments);
+  };
+
+  const updateCommentsAmountForFirestore = async () => {
+    const postsCollectionRef = doc(firestoreDB, "posts", postId);
+    await updateDoc(postsCollectionRef, { commentsAmount });
+  };
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
