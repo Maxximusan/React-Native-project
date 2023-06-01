@@ -72,7 +72,7 @@ export const DefaultScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   style={styles.commentItem}
                   onPress={() =>
-                    navigation.navigate("Comments", { postId: item.id })
+                    navigation.navigate("Comments", { postId: item.id, photo: item.photo })
                   }
                 >
                   <FontAwesome
