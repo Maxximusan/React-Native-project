@@ -8,6 +8,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { Camera, CameraType } from "expo-camera";
 import * as Location from "expo-location";
 // import { TouchableOpacity } from "react-native-gesture-handler";
@@ -28,6 +29,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
 
   const [type, setType] = useState(CameraType.back);
+  const isFocused = useIsFocused();
 
   const { userId, nickName, userEmail, userPhoto } = useSelector(
     (state) => state.auth
@@ -97,6 +99,7 @@ export const CreatePostsScreen = ({ navigation }) => {
     navigation.navigate("DefaultScreen");
     setComment("");
     setTerrain("");
+    setFoto(null);
   };
 
   const uploadPostToServer = async () => {
@@ -142,25 +145,27 @@ export const CreatePostsScreen = ({ navigation }) => {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={213}
       >
-        <Camera style={styles.camera} type={type} ref={setSnap}>
-          {foto && (
-            <View style={styles.takePhotoContainer}>
-              <Image
-                source={{ uri: foto }}
-                style={{ height: 120, width: 120, borderRadius: 10 }}
-              />
-            </View>
-          )}
-          <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
-            <FontAwesome5 name="camera-retro" size={40} color="pink" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.changeCamera}
-            onPress={() => toogleCameraType()}
-          >
-            <FontAwesome name="exchange" size={30} color="white" />
-          </TouchableOpacity>
-        </Camera>
+        {isFocused && (
+          <Camera style={styles.camera} type={type} ref={setSnap}>
+            {foto && (
+              <View style={styles.takePhotoContainer}>
+                <Image
+                  source={{ uri: foto }}
+                  style={{ height: 120, width: 120, borderRadius: 10 }}
+                />
+              </View>
+            )}
+            <TouchableOpacity style={styles.snapContainer} onPress={takePhoto}>
+              <FontAwesome5 name="camera-retro" size={40} color="pink" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.changeCamera}
+              onPress={() => toogleCameraType()}
+            >
+              <FontAwesome name="exchange" size={30} color="white" />
+            </TouchableOpacity>
+          </Camera>
+        )}
         <View style={styles.form}>
           <View style={{ marginBottom: 32 }}>
             <TextInput

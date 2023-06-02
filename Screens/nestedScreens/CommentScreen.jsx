@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
     // backgroundColor: `#3275cd`,
     // borderRadius: 15,
     // marginBottom: 40,
-    // justifyContent: "center",
-    // alignItems: "center",
+
     position: "absolute",
     right: 8,
     bottom: 8,
@@ -216,13 +215,8 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   input: {
-    // fontFamily: "roboto-400",
-    // fontSize: 16,
-    // lineHeight: 19,
-    // paddingLeft: 16,
     // marginHorizontal: 10,
     // paddingTop: 10,
-    // borderWidth: 1,
     // borderColor: "transparent",
     // borderBottomColor: "#E8E8E8",
     height: 50,
