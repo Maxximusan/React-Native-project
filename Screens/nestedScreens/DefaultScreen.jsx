@@ -9,7 +9,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
@@ -41,7 +41,7 @@ export const DefaultScreen = ({ route, navigation }) => {
     setUpdatedPosts(likedPosts(posts, userId));
   }, [posts]);
 
-  console.log("posts", posts);
+  // console.log("posts", posts);
   // console.log("updatedPosts", updatedPosts);
   return (
     <View style={styles.container}>
@@ -72,14 +72,20 @@ export const DefaultScreen = ({ route, navigation }) => {
                 style={{ width: 360, height: 240 }}
               />
             </View>
-            <View>
+            <View style={{ marginBottom: 10 }}>
               <Text style={styles.postTitle}>{item.comment}</Text>
             </View>
 
-            <View>
-              <View style={styles.statsContainer}>
+            <View style={styles.statsContainer}>
+              <View
+                style={{
+                  flexDirection: "row",
+
+                  alignItems: "center",
+                }}
+              >
                 <TouchableOpacity
-                  style={styles.commentItem}
+                  style={{ flexDirection: "row" }}
                   onPress={() =>
                     navigation.navigate("Comments", {
                       postId: item.id,
@@ -98,7 +104,7 @@ export const DefaultScreen = ({ route, navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => addLike(posts, item.id, userId)}
-                  style={{ ...styles.commentItem, marginLeft: 25 }}
+                  style={{ flexDirection: "row", marginLeft: 25 }}
                 >
                   <AntDesign
                     name="like2"
@@ -110,14 +116,15 @@ export const DefaultScreen = ({ route, navigation }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
-            <View>
-              <Button
-                title="go to Map"
-                onPress={() =>
-                  navigation.navigate("Map", { location: item.location })
-                }
-              />
+              <TouchableOpacity
+                style={{ flexDirection: "row" }}
+                onPress={() => {
+                  navigation.navigate("Map", { location: item.location });
+                }}
+              >
+                <Octicons name="location" size={20} color="#BDBDBD" />
+                <Text style={styles.locationItemText}>{item.terrain}</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -172,15 +179,23 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
     // alignContent: "space-between",
     alignItems: "center",
   },
-  commentItem: {
-    flexDirection: "row",
-  },
+
   commentsAmount: {
     color: "#212121",
     marginLeft: 5,
     fontSize: 18,
+  },
+  locationItemText: {
+    marginLeft: 5,
+    fontFamily: "roboto-400",
+    fontStyle: "normal",
+    fontSize: 16,
+    lineHeight: 19,
+    textDecorationLine: "underline",
+    color: "#212121",
   },
 });
