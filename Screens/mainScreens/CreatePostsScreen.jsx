@@ -115,6 +115,9 @@ export const CreatePostsScreen = ({ navigation }) => {
         userEmail,
         userPhoto,
         commentsAmount: 0,
+        likesNumber: 0,
+        likes: [],
+        isLiked: false,
       });
       console.log("Document written with ID: ", createPost.id);
     } catch (error) {

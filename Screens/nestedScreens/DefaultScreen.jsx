@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   View,
   Image,
@@ -9,13 +9,17 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
+import { addLike, likedPosts } from "../../helpers/likeHandler";
 
 export const DefaultScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
+  const [updatedPosts, setUpdatedPosts] = useState([]);
+
+  const { userId } = useSelector((state) => state.auth);
 
   const getAllPost = async () => {
     await onSnapshot(
@@ -33,12 +37,17 @@ export const DefaultScreen = ({ route, navigation }) => {
     getAllPost();
   }, []);
 
+  useEffect(() => {
+    setUpdatedPosts(likedPosts(posts, userId));
+  }, [posts]);
+
   console.log("posts", posts);
+  // console.log("updatedPosts", updatedPosts);
   return (
     <View style={styles.container}>
       <FlatList
-        data={posts}
-        keyExtractor={(item, indx) => indx.toString()}
+        data={updatedPosts}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.post}>
             <View style={styles.userInfoContainer}>
@@ -72,7 +81,10 @@ export const DefaultScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                   style={styles.commentItem}
                   onPress={() =>
-                    navigation.navigate("Comments", { postId: item.id, photo: item.photo })
+                    navigation.navigate("Comments", {
+                      postId: item.id,
+                      photo: item.photo,
+                    })
                   }
                 >
                   <FontAwesome
@@ -84,6 +96,19 @@ export const DefaultScreen = ({ route, navigation }) => {
                     {item.commentsAmount}
                   </Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => addLike(posts, item.id, userId)}
+                  style={{ ...styles.commentItem, marginLeft: 25 }}
+                >
+                  <AntDesign
+                    name="like2"
+                    size={18}
+                    color={!item.isLiked ? "#BDBDBD" : "#FF6C00"}
+                  />
+                  <Text style={{ color: "#212121", marginLeft: 5 }}>
+                    {item.likesNumber}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
             <View>
@@ -93,12 +118,6 @@ export const DefaultScreen = ({ route, navigation }) => {
                   navigation.navigate("Map", { location: item.location })
                 }
               />
-              {/* <Button
-                title="go to Comments"
-                onPress={() =>
-                  navigation.navigate("Comments", { postId: item.id })
-                }
-              /> */}
             </View>
           </View>
         )}
