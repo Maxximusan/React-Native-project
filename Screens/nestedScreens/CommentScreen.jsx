@@ -30,10 +30,11 @@ export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
   // или
   // const postId = route.params.postId;
-
+  const [height, setHeight] = useState(null);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
+  const [sortComments, setSortComments] = useState([]);
   const [commentsAmount, setCommentsAmount] = useState(0);
   const { nickName, userPhoto, userId } = useSelector((state) => state.auth);
 
@@ -43,6 +44,7 @@ export const CommentScreen = ({ route }) => {
 
   useEffect(() => {
     updateCommentsAmount(allComments.length);
+    sortCommentByCreatedDate(allComments);
   }, [allComments]);
 
   useEffect(() => {
@@ -84,12 +86,24 @@ export const CommentScreen = ({ route }) => {
 
   allComments.map((comment) => {
     dayjs(comment.timeOfCreation).format("DD MMMM, YYYY | HH:mm");
+    // console.log("LOOK", dayjs(comment.timeOfCreation).unix());
   });
-
+  console.log("sortedcomments", sortComments);
+  const sortCommentByCreatedDate = (allComments) => {
+    let result = [...allComments].sort((prev, next) => {
+      if (prev.timeOfCreation > next.timeOfCreation) {
+        return 1;
+      } else return -1;
+    });
+    console.log("RESULT", result);
+    setSortComments(result);
+    return result;
+  };
   const submitAddComment = async () => {
     await createComment();
     setComment("");
     keyboardHide();
+    setHeight(null);
   };
 
   const updateCommentsAmount = (allComments) => {
@@ -113,60 +127,65 @@ export const CommentScreen = ({ route }) => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View style={styles.container} onStartShouldSetResponder={() => true}>
         <View style={styles.photoContainer}>
           <Image style={styles.photo} source={{ uri: photo }} />
         </View>
-        <SafeAreaView style={{ flex: 1 }}>
-          <FlatList
-            data={allComments}
-            renderItem={({ item }) => (
-              <View
-                style={
-                  item.userId === userId
-                    ? styles.currentUserComment
-                    : styles.otherUserComment
-                }
-              >
-                <Image
-                  source={{ uri: item.userPhoto }}
-                  style={styles.commentUserPhoto}
-                />
-                <View style={styles.commentContainer}>
-                  <Text style={{ color: "#0a860a" }}>{item.nickName}</Text>
-                  <Text>{item.comment}</Text>
-                  <Text style={{ fontSize: 10 }}>
-                    {dayjs(item.timeOfCreation).format("DD MMMM, YYYY | HH:mm")}
-                  </Text>
+        {sortComments && (
+          <SafeAreaView style={{ flex: 1 }}>
+            <FlatList
+              data={sortComments}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View
+                  onStartShouldSetResponder={() => true}
+                  style={
+                    item.userId === userId
+                      ? styles.currentUserComment
+                      : styles.otherUserComment
+                  }
+                >
+                  <Image
+                    source={{ uri: item.userPhoto }}
+                    style={styles.commentUserPhoto}
+                  />
+                  <View style={styles.commentContainer}>
+                    <Text style={{ color: "#0a860a" }}>{item.nickName}</Text>
+                    <Text>{item.comment}</Text>
+                    <Text style={{ fontSize: 10 }}>
+                      {dayjs(item.timeOfCreation).format(
+                        "DD MMMM, YYYY | HH:mm"
+                      )}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
-          />
-        </SafeAreaView>
-        {/* <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={25}
-      > */}
+              )}
+            />
+          </SafeAreaView>
+        )}
+
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
+            style={{ ...styles.input, height: Math.max(50, height) }}
             textAlign={"left"}
             placeholder="Введите Коментарий"
             placeholderTextColor={`#ff0000`}
             value={comment}
-            onChangeText={setComment}
+            onChangeText={(value) => setComment(value)}
             onFocus={() => activeInputHandler()}
             multiline={true}
-            numberOfLines={5}
+            // numberOfLines={5}
+            onContentSizeChange={({
+              nativeEvent: {
+                contentSize: { height },
+              },
+            }) => setHeight(height)}
           />
 
           <TouchableOpacity style={styles.sendBtn} onPress={submitAddComment}>
-            {/* <Text style={styles.sendTitle}> Добавить коментарий </Text> */}
             <AntDesign name="arrowup" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
-        {/* </KeyboardAvoidingView> */}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -176,26 +195,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     // alignItems: "center",
+    marginHorizontal: 16,
   },
   commentContainer: {
-    borderWidth: 1,
-    borderColor: "#20b2aa",
+    borderWidth: 0.5,
+    borderColor: "#0882e6",
     marginHorizontal: 10,
     padding: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
+    width: "85%",
   },
   sendBtn: {
-    // marginHorizontal: 30,
-    // height: 40,
-    // borderWidth: 2,
-    // borderColor: `#0099ff`,
-    // backgroundColor: `#3275cd`,
-    // borderRadius: 15,
-    // marginBottom: 40,
-
     position: "absolute",
     right: 8,
     bottom: 8,
+    // bottom: -20,
     alignItems: "center",
     justifyContent: "center",
     width: 34,
@@ -208,20 +222,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   inputContainer: {
-    position: "absolute",
-    bottom: 10,
+    // position: "absolute",
+    // bottom: 10,
     alignSelf: "center",
-    marginHorizontal: 16,
-    width: "90%",
+    // marginHorizontal: 16,
+    width: "100%",
+    // height: 50,
+    // marginBottom: 28,
   },
   input: {
-    // marginHorizontal: 10,
-    // paddingTop: 10,
-    // borderColor: "transparent",
-    // borderBottomColor: "#E8E8E8",
-    height: 50,
     // minHeight: 50,
-    maxHeight: 100,
+    // maxHeight: 51,
+
     paddingLeft: 16,
     borderWidth: 1,
     borderRadius: 30,
@@ -232,20 +244,19 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 16,
     lineHeight: 19,
-
     // color: `#212121`,
   },
   photoContainer: {
     paddingTop: 12,
     alignItems: "center",
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     marginBottom: 12,
   },
   photo: {
-    height: 240,
-    width: "100%",
+    height: 120,
+    width: "50%",
     // height: "50%",
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     borderRadius: 8,
   },
   currentUserComment: {
