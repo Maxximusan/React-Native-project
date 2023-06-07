@@ -2,7 +2,7 @@ import { StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 export const UserAvatar = (props) => {
-  const { getAvatarPhoto, avatar, deletePhoto } = props;
+  const { getAvatarPhoto, avatar, deleteAvatarPhoto } = props;
   return (
     <>
       {avatar ? (
@@ -10,7 +10,7 @@ export const UserAvatar = (props) => {
           <Image style={styles.userAvatar} source={{ uri: avatar }} />
           <TouchableOpacity
             style={styles.addAvatar}
-            onPress={() => deletePhoto()}
+            onPress={() => deleteAvatarPhoto()}
           >
             <AntDesign
               style={styles.iconDel}

@@ -70,6 +70,7 @@ export const HomeScreen = ({ navigation }) => {
         name="Profile"
         component={ProfileScreen}
         options={{
+          headerShown: false,
           headerTitleAlign: "center",
           tabBarIcon: ({ focused, color, size }) => (
             <Feather name="user" size={size} color={color} />

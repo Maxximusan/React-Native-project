@@ -1,16 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
-import { useSelector } from "react-redux";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Image,
+  ImageBackground,
+  TouchableOpacity,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { MaterialIcons } from "@expo/vector-icons";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { firestoreDB } from "../../firebase/config";
+import { firestoreDB, auth } from "../../firebase/config";
+import { UserAvatar } from "../../components/AvatarBox/UserAvatar";
+import { authLogOutUser } from "../../redux/auth/authOperations";
+import { PostsList } from "../../components/PostsList/PostList";
+import { likedPosts } from "../../helpers/likeHandler";
+// import { uploadUserAvatar } from "../../redux/auth/authOperations";
+import { pickImageAsync } from "../../helpers/imagePicker";
+import {
+  deleteUserPhoto,
+  addUserPhoto,
+  uploadNewUserAvatar,
+} from "../../helpers/addOrDelAvatarForProfile";
 
-export const ProfileScreen = () => {
+export const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
+  const [updateUserPosts, setUpdateUserPosts] = useState([]);
+  const [newUserAvatar, setNewUserAvatar] = useState(null);
   const { userId } = useSelector((state) => state.auth);
+
+  const { uid, displayName, photoURL } = auth.currentUser;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getUserPosts();
   }, []);
+
+  useEffect(() => {
+    setUpdateUserPosts(likedPosts(userPosts, userId));
+  }, [userPosts]);
 
   const getUserPosts = async () => {
     const q = query(
@@ -30,26 +59,51 @@ export const ProfileScreen = () => {
     );
   };
 
+  const getUserAvatar = async () => {
+    const result = await pickImageAsync();
+    setNewUserAvatar(result);
+    const photoForDownload = await uploadNewUserAvatar(displayName, result);
+    addUserPhoto(photoForDownload);
+    console.log("auth.currentUs", auth.currentUser);
+  };
+
+  const logOut = () => {
+    dispatch(authLogOutUser());
+  };
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={userPosts}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              marginBottom: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              source={{ uri: item.photo }}
-              style={{ width: 350, height: 200 }}
+      <ImageBackground
+        style={styles.image}
+        source={require("../../assets/images/Photo-BG.jpg")}
+      >
+        <View style={styles.profileContainer}>
+          <View>
+            <UserAvatar
+              getAvatarPhoto={getUserAvatar}
+              avatar={photoURL}
+              deleteAvatarPhoto={deleteUserPhoto}
             />
+            <TouchableOpacity style={styles.profileLogoutBtn}>
+              <MaterialIcons
+                name="logout"
+                size={24}
+                color="#BDBDBD"
+                // color="#f50e0e"
+                onPress={() => logOut()}
+              />
+            </TouchableOpacity>
+            <Text style={styles.profileNickName}>{displayName}</Text>
           </View>
-        )}
-      />
+          <PostsList
+            isProfileScreen={true}
+            updatedPostArray={updateUserPosts}
+            userId={userId}
+            navigation={navigation}
+            posts={userPosts}
+          />
+        </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -57,7 +111,40 @@ export const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alighItems: "center",
+    // justifyContent: "center",
+    // alighItems: "center",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    height: 812,
+    paddingTop: 147,
+    // justifyContent: "flex-end",
+    // alignItems: "center",
+  },
+  profileContainer: {
+    alignItems: "center",
+    height: "100%",
+    backgroundColor: "#fff",
+    borderRadius: 0,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingTop: 92,
+  },
+  profileLogoutBtn: {
+    position: "absolute",
+    // top: -75,
+    // right: -170,
+    bottom: 117,
+    left: 175,
+  },
+  profileNickName: {
+    marginBottom: 32,
+    fontFamily: "roboto-400",
+    fontStyle: "normal",
+    fontSize: 16,
+    lineHeight: 19,
+    fontSize: 30,
+    lineHeight: 35,
   },
 });

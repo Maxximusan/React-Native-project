@@ -77,7 +77,7 @@ export const RegistrationScreen = ({ navigation }) => {
                 <UserAvatar
                   getAvatarPhoto={getAvatarFoto}
                   avatar={state.avatar}
-                  deletePhoto={deleteFoto}
+                  deleteAvatarPhoto={deleteFoto}
                 />
                 <View style={styles.header}>
                   <Text style={styles.headerTitle}>Регистрация</Text>

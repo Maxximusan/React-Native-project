@@ -1,16 +1,20 @@
 import { updateProfile } from "firebase/auth";
-import { auth } from "../firebase/config";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { auth, storage } from "../firebase/config";
+import { authSlice } from "../redux/auth/authReducer";
 
-export const deleteUserPhoto = async () => {
+const storage2 = getStorage();
+
+export const deleteUserPhoto = async (dispatch) => {
   try {
     await updateProfile(auth.currentUser, {
       photoURL: "",
     });
+
     console.log("DELETE - OK!");
   } catch (error) {
     console.log("error.message", error.message);
   }
-  addOrDelAvatarIn;
 };
 
 export const addUserPhoto = async (photoForDownload) => {
@@ -23,4 +27,15 @@ export const addUserPhoto = async (photoForDownload) => {
     .catch((error) => {
       console.log("error", error);
     });
+};
+
+export const uploadNewUserAvatar = async (login, avatar) => {
+  const response = await fetch(avatar);
+  const file = await response.blob();
+  const storageRef = ref(storage, `usersAvatars/${login}1`);
+  await uploadBytes(storageRef, file);
+  const avatarUrl = await getDownloadURL(
+    ref(storage, `usersAvatars/${login}1`)
+  );
+  return avatarUrl;
 };
