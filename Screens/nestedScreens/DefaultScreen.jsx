@@ -42,8 +42,8 @@ export const DefaultScreen = ({ route, navigation }) => {
   }, [posts]);
 
   console.log("posts", updatedPosts);
-  console.log("что там с фото- 4", posts[3].userPhoto);
-  console.log("что там с фото- 5", posts[4].userPhoto);
+  // console.log("что там с фото- 4", posts[3].userPhoto);
+  // console.log("что там с фото- 5", posts[4].userPhoto);
   // console.log("updatedPosts", updatedPosts);
   return (
     <View style={styles.container}>

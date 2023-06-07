@@ -71,6 +71,10 @@ export const ProfileScreen = ({ navigation }) => {
     dispatch(authLogOutUser());
   };
 
+  const deleteAvatar = () => {
+    deleteUserPhoto();
+    setNewUserAvatar(null);
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -81,8 +85,8 @@ export const ProfileScreen = ({ navigation }) => {
           <View>
             <UserAvatar
               getAvatarPhoto={getUserAvatar}
-              avatar={photoURL}
-              deleteAvatarPhoto={deleteUserPhoto}
+              avatar={newUserAvatar}
+              deleteAvatarPhoto={deleteAvatar}
             />
             <TouchableOpacity style={styles.profileLogoutBtn}>
               <MaterialIcons
