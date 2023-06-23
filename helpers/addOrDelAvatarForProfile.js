@@ -5,11 +5,20 @@ import { authSlice } from "../redux/auth/authReducer";
 
 const storage2 = getStorage();
 
-export const deleteUserPhoto = async () => {
+export const deleteUserPhoto = async (dispatch) => {
   try {
     await updateProfile(auth.currentUser, {
       photoURL: "",
     });
+    const { photoURL, email, displayName, uid } = auth.currentUser;
+    dispatch(
+      authSlice.actions.updateUserProfile({
+        userPhoto: photoURL,
+        nickName: displayName,
+        userId: uid,
+        userEmail: email,
+      })
+    );
 
     console.log("DELETE - OK!");
   } catch (error) {
@@ -43,10 +52,11 @@ export const addUserPhoto = async (photoForDownload, dispatch) => {
 export const uploadNewUserAvatar = async (login, avatar) => {
   const response = await fetch(avatar);
   const file = await response.blob();
-  const storageRef = ref(storage, `usersAvatars/${login}1`);
+  const uniqueAvatarId = Date.now().toString();
+  const storageRef = ref(storage, `usersAvatars/${login}${uniqueAvatarId}`);
   await uploadBytes(storageRef, file);
   const avatarUrl = await getDownloadURL(
-    ref(storage, `usersAvatars/${login}1`)
+    ref(storage, `usersAvatars/${login}${uniqueAvatarId}`)
   );
   return avatarUrl;
 };
