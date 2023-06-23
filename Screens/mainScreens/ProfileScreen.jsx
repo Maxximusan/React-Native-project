@@ -63,7 +63,7 @@ export const ProfileScreen = ({ navigation }) => {
     const result = await pickImageAsync();
     setNewUserAvatar(result);
     const photoForDownload = await uploadNewUserAvatar(displayName, result);
-    addUserPhoto(photoForDownload);
+    addUserPhoto(photoForDownload, dispatch);
     console.log("auth.currentUs", auth.currentUser);
   };
 
