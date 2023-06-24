@@ -23,8 +23,10 @@ import {
   addUserPhoto,
   uploadNewUserAvatar,
 } from "../../helpers/addOrDelAvatarForProfile";
+import { useOrientationScreen } from "../../hooks/ScreenOrientation";
 
 export const ProfileScreen = ({ navigation }) => {
+  const orientation = useOrientationScreen();
   const [userPosts, setUserPosts] = useState([]);
   const [updateUserPosts, setUpdateUserPosts] = useState([]);
   // const [newUserAvatar, setNewUserAvatar] = useState(null);
@@ -78,11 +80,21 @@ export const ProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        style={styles.image}
+        style={
+          orientation.isPortrait
+            ? { ...styles.image, paddingTop: 0 }
+            : styles.image
+        }
         source={require("../../assets/images/Photo-BG.jpg")}
       >
-        <View style={styles.profileContainer}>
-          <View>
+        <View
+          style={
+            orientation.isPortrait
+              ? { ...styles.profileContainer, paddingTop: 12 }
+              : styles.profileContainer
+          }
+        >
+          <View style={orientation.isPortrait ? { display: "none" } : {}}>
             <UserAvatar
               getAvatarPhoto={getUserAvatar}
               avatar={photoURL}
@@ -105,6 +117,7 @@ export const ProfileScreen = ({ navigation }) => {
             userId={userId}
             navigation={navigation}
             posts={userPosts}
+            orientation={orientation.isPortrait}
           />
         </View>
       </ImageBackground>
@@ -123,6 +136,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     height: 812,
     paddingTop: 147,
+
+    // paddingTop: 60,
     // justifyContent: "flex-end",
     // alignItems: "center",
   },
@@ -134,6 +149,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingTop: 92,
+    // paddingTop: 12,
   },
   profileLogoutBtn: {
     position: "absolute",

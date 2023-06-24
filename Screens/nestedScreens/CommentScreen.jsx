@@ -26,6 +26,7 @@ import {
 import dayjs from "dayjs";
 
 import { firestoreDB } from "../../firebase/config";
+import { useOrientationScreen } from "../../hooks/ScreenOrientation";
 
 export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
@@ -33,7 +34,8 @@ export const CommentScreen = ({ route }) => {
   // const postId = route.params.postId;
   // const width = Dimensions.get("window").width;
   // const heightD = Dimensions.get("window").height;
-  const [screenHorizontally, setScreenHorizontally] = useState(false);
+  // const [screenHorizontally, setScreenHorizontally] = useState(false);
+  const orientation = useOrientationScreen();
   const [height, setHeight] = useState(null);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [comment, setComment] = useState("");
@@ -65,25 +67,25 @@ export const CommentScreen = ({ route }) => {
   //     dimensionsHandler?.remove();
   //   };
   // }, []);
-  useEffect(() => {
-    const onChange = (result) => {
-      // setScreenInfo(result.screen);
-      // console.log("height", height);
-      // console.log("width", width);
-      console.log("resultscreen", result.window);
-      console.log("height", result.window.height);
-      console.log("width", result.window.width);
+  // useEffect(() => {
+  //   const onChange = (result) => {
+  //     // setScreenInfo(result.screen);
+  //     // console.log("height", height);
+  //     // console.log("width", width);
+  //     console.log("resultscreen", result.window);
+  //     console.log("height", result.window.height);
+  //     console.log("width", result.window.width);
 
-      result.window.width > result.window.height
-        ? setScreenHorizontally(true)
-        : setScreenHorizontally(false);
-    };
+  //     result.window.width > result.window.height
+  //       ? setScreenHorizontally(true)
+  //       : setScreenHorizontally(false);
+  //   };
 
-    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-    return () => {
-      dimensionsHandler?.remove();
-    };
-  }, []);
+  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     dimensionsHandler?.remove();
+  //   };
+  // }, []);
 
   useEffect(() => {
     getAllPosts();
@@ -175,7 +177,7 @@ export const CommentScreen = ({ route }) => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container} onStartShouldSetResponder={() => true}>
-        {screenHorizontally ? null : (
+        {orientation.isPortrait ? null : (
           <View style={styles.photoContainer}>
             <Image style={styles.photo} source={{ uri: photo }} />
           </View>

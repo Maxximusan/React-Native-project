@@ -15,14 +15,16 @@ import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
 import { addLike, likedPosts } from "../../helpers/likeHandler";
+import { useOrientationScreen } from "../../hooks/ScreenOrientation";
 
 export const DefaultScreen = ({ route, navigation }) => {
   // const { height, width } = Dimensions.get("window");
   // const width = Dimensions.get("window").width;
   // const height = Dimensions.get("window").height;
-  const [screenInfo, setScreenInfo] = useState(Dimensions.get("screen"));
-  const [screenHorizontally, setScreenHorizontally] = useState(false);
-
+  // const [screenInfo, setScreenInfo] = useState(Dimensions.get("screen"));
+  // const [screenHorizontally, setScreenHorizontally] = useState(false);
+  const orientation = useOrientationScreen();
+  console.log(orientation);
   const [posts, setPosts] = useState([]);
   const [updatedPosts, setUpdatedPosts] = useState([]);
 
@@ -64,27 +66,27 @@ export const DefaultScreen = ({ route, navigation }) => {
   //   };
   // }, []);
 
-  useEffect(() => {
-    const onChange = (result) => {
-      // setScreenInfo(result.screen);
-      // console.log("height", height);
-      // console.log("width", width);
-      console.log("resultscreen", result.window);
-      console.log("height", result.window.height);
-      console.log("width", result.window.width);
+  // useEffect(() => {
+  //   const onChange = (result) => {
+  //     // setScreenInfo(result.screen);
+  //     // console.log("height", height);
+  //     // console.log("width", width);
+  //     console.log("resultscreen", result.window);
+  //     console.log("height", result.window.height);
+  //     console.log("width", result.window.width);
 
-      setScreenInfo(result.screen);
+  //     setScreenInfo(result.screen);
 
-      // result.window.width > result.window.height
-      //   ? setScreenHorizontally(true)
-      //   : setScreenHorizontally(false);
-    };
+  //     // result.window.width > result.window.height
+  //     //   ? setScreenHorizontally(true)
+  //     //   : setScreenHorizontally(false);
+  //   };
 
-    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-    return () => {
-      dimensionsHandler?.remove();
-    };
-  }, []);
+  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     dimensionsHandler?.remove();
+  //   };
+  // }, []);
 
   useEffect(() => {
     getAllPost();
@@ -117,7 +119,7 @@ export const DefaultScreen = ({ route, navigation }) => {
             </View>
             <View
               style={
-                screenInfo.width > screenInfo.height
+                orientation.isPortrait
                   ? {
                       marginBottom: 10,
                       // justifyContent: "center",
@@ -133,7 +135,7 @@ export const DefaultScreen = ({ route, navigation }) => {
             </View>
             <View
               style={
-                screenInfo.width > screenInfo.height
+                orientation.isPortrait
                   ? { marginBottom: 10, alignItems: "center" }
                   : { marginBottom: 10 }
               }

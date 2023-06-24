@@ -11,8 +11,14 @@ import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 import { addLike } from "../../helpers/likeHandler";
 
 export const PostsList = (props) => {
-  const { isProfileScreen, updatedPostArray, userId, navigation, posts } =
-    props;
+  const {
+    isProfileScreen,
+    updatedPostArray,
+    userId,
+    navigation,
+    posts,
+    orientation,
+  } = props;
 
   return (
     <FlatList
@@ -36,7 +42,11 @@ export const PostsList = (props) => {
           <View style={{ marginBottom: 10 }}>
             <Image
               source={{ uri: item.photo }}
-              style={{ width: 360, height: 240 }}
+              style={
+                isProfileScreen && orientation
+                  ? { width: 600, height: 260 }
+                  : { width: 360, height: 240 }
+              }
             />
           </View>
           <View style={{ marginBottom: 10 }}>
