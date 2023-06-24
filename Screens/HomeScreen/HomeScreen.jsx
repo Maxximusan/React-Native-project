@@ -31,7 +31,7 @@ export const HomeScreen = ({ navigation }) => {
         name="Публикации"
         component={PostsScreen}
         options={{
-          // headerShown: false,
+          headerShown: false,
           headerTitleAlign: "center",
           headerRight: ({ focused, color, size }) => (
             <MaterialIcons

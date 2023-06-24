@@ -11,10 +11,10 @@ export const PostsScreen = () => {
   return (
     <NestedScreens.Navigator>
       <NestedScreens.Screen
-        name="DefaultScreen"
+        name="Публикации DS"
         component={DefaultScreen}
         options={{
-          headerShown: false,
+          // headerShown: false,
           headerTitleAlign: "center",
           headerLeft: () => null,
         }}

@@ -8,6 +8,7 @@ import {
   Button,
   Text,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 
@@ -16,6 +17,12 @@ import { firestoreDB } from "../../firebase/config";
 import { addLike, likedPosts } from "../../helpers/likeHandler";
 
 export const DefaultScreen = ({ route, navigation }) => {
+  // const { height, width } = Dimensions.get("window");
+  // const width = Dimensions.get("window").width;
+  // const height = Dimensions.get("window").height;
+  const [screenInfo, setScreenInfo] = useState(Dimensions.get("screen"));
+  const [screenHorizontally, setScreenHorizontally] = useState(false);
+
   const [posts, setPosts] = useState([]);
   const [updatedPosts, setUpdatedPosts] = useState([]);
 
@@ -33,6 +40,52 @@ export const DefaultScreen = ({ route, navigation }) => {
     );
   };
 
+  // useEffect(() => {
+  //   const width = Dimensions.get("window").width;
+  //   const height = Dimensions.get("window").height;
+
+  //   width > height ? setScreenHorizontally(true) : setScreenHorizontally(false);
+  // }, []);
+
+  // useEffect(() => {
+  //   const { height, width } = Dimensions.get("window");
+  //   const onChange = () => {
+  //     console.log("height", height);
+  //     console.log("width", width);
+
+  //     width > height
+  //       ? setScreenHorizontally(true)
+  //       : setScreenHorizontally(false);
+  //   };
+
+  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     dimensionsHandler?.remove();
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const onChange = (result) => {
+      // setScreenInfo(result.screen);
+      // console.log("height", height);
+      // console.log("width", width);
+      console.log("resultscreen", result.window);
+      console.log("height", result.window.height);
+      console.log("width", result.window.width);
+
+      setScreenInfo(result.screen);
+
+      // result.window.width > result.window.height
+      //   ? setScreenHorizontally(true)
+      //   : setScreenHorizontally(false);
+    };
+
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+    return () => {
+      dimensionsHandler?.remove();
+    };
+  }, []);
+
   useEffect(() => {
     getAllPost();
   }, []);
@@ -41,7 +94,7 @@ export const DefaultScreen = ({ route, navigation }) => {
     setUpdatedPosts(likedPosts(posts, userId));
   }, [posts]);
 
-  console.log("posts", updatedPosts);
+  // console.log("posts", updatedPosts);
   // console.log("что там с фото- 4", posts[3].userPhoto);
   // console.log("что там с фото- 5", posts[4].userPhoto);
   // console.log("updatedPosts", updatedPosts);
@@ -63,18 +116,28 @@ export const DefaultScreen = ({ route, navigation }) => {
               </View>
             </View>
             <View
-              style={{
-                marginBottom: 10,
-                // justifyContent: "center",
-                // alignItems: "center",
-              }}
+              style={
+                screenInfo.width > screenInfo.height
+                  ? {
+                      marginBottom: 10,
+                      // justifyContent: "center",
+                      alignItems: "center",
+                    }
+                  : { marginBottom: 10 }
+              }
             >
               <Image
                 source={{ uri: item.photo }}
                 style={{ width: 360, height: 240 }}
               />
             </View>
-            <View style={{ marginBottom: 10 }}>
+            <View
+              style={
+                screenInfo.width > screenInfo.height
+                  ? { marginBottom: 10, alignItems: "center" }
+                  : { marginBottom: 10 }
+              }
+            >
               <Text style={styles.postTitle}>{item.comment}</Text>
             </View>
 
@@ -147,6 +210,8 @@ const styles = StyleSheet.create({
   post: {
     marginHorizontal: 16,
     marginBottom: 35,
+    // alighItems: "center",
+    // justifyContent: "center",
   },
   userInfoContainer: {
     justifyContent: "flex-start",

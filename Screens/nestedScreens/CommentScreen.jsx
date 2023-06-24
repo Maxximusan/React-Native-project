@@ -11,6 +11,7 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
@@ -30,6 +31,9 @@ export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
   // или
   // const postId = route.params.postId;
+  // const width = Dimensions.get("window").width;
+  // const heightD = Dimensions.get("window").height;
+  const [screenHorizontally, setScreenHorizontally] = useState(false);
   const [height, setHeight] = useState(null);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [comment, setComment] = useState("");
@@ -37,6 +41,49 @@ export const CommentScreen = ({ route }) => {
   const [sortComments, setSortComments] = useState([]);
   const [commentsAmount, setCommentsAmount] = useState(0);
   const { nickName, userPhoto, userId } = useSelector((state) => state.auth);
+
+  // useEffect(() => {
+  //   const width = Dimensions.get("window").width;
+  //   const height = Dimensions.get("window").height;
+
+  //   width > height ? setScreenHorizontally(true) : setScreenHorizontally(false);
+  // }, []);
+
+  // useEffect(() => {
+  //   // const { height, width } = Dimensions.get("window");
+  //   const onChange = () => {
+  //     console.log("height", heightD);
+  //     console.log("width", width);
+
+  //     width > heightD
+  //       ? setScreenHorizontally(true)
+  //       : setScreenHorizontally(false);
+  //   };
+
+  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+  //   return () => {
+  //     dimensionsHandler?.remove();
+  //   };
+  // }, []);
+  useEffect(() => {
+    const onChange = (result) => {
+      // setScreenInfo(result.screen);
+      // console.log("height", height);
+      // console.log("width", width);
+      console.log("resultscreen", result.window);
+      console.log("height", result.window.height);
+      console.log("width", result.window.width);
+
+      result.window.width > result.window.height
+        ? setScreenHorizontally(true)
+        : setScreenHorizontally(false);
+    };
+
+    const dimensionsHandler = Dimensions.addEventListener("change", onChange);
+    return () => {
+      dimensionsHandler?.remove();
+    };
+  }, []);
 
   useEffect(() => {
     getAllPosts();
@@ -128,9 +175,11 @@ export const CommentScreen = ({ route }) => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container} onStartShouldSetResponder={() => true}>
-        <View style={styles.photoContainer}>
-          <Image style={styles.photo} source={{ uri: photo }} />
-        </View>
+        {screenHorizontally ? null : (
+          <View style={styles.photoContainer}>
+            <Image style={styles.photo} source={{ uri: photo }} />
+          </View>
+        )}
         {sortComments && (
           <SafeAreaView style={{ flex: 1 }}>
             <FlatList
@@ -149,6 +198,7 @@ export const CommentScreen = ({ route }) => {
                     source={{ uri: item.userPhoto }}
                     style={styles.commentUserPhoto}
                   />
+
                   <View style={styles.commentContainer}>
                     <Text style={{ color: "#0a860a" }}>{item.nickName}</Text>
                     <Text>{item.comment}</Text>
@@ -163,7 +213,6 @@ export const CommentScreen = ({ route }) => {
             />
           </SafeAreaView>
         )}
-
         <View style={styles.inputContainer}>
           <TextInput
             style={{ ...styles.input, height: Math.max(50, height) }}
@@ -196,6 +245,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     // alignItems: "center",
     marginHorizontal: 16,
+    // backgroundColor: "#ffffff",
   },
   commentContainer: {
     borderWidth: 0.5,
@@ -203,7 +253,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     padding: 10,
     // marginBottom: 10,
-    width: "85%",
+    width: "100%",
+    backgroundColor: "#e0e0e0",
   },
   sendBtn: {
     position: "absolute",
