@@ -23,7 +23,7 @@ import {
   addUserPhoto,
   uploadNewUserAvatar,
 } from "../../helpers/addOrDelAvatarForProfile";
-import { useOrientationScreen } from "../../hooks/ScreenOrientation";
+import { useOrientationScreen } from "../../hooks/screenOrientation";
 
 export const ProfileScreen = ({ navigation }) => {
   const orientation = useOrientationScreen();

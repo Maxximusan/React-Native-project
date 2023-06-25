@@ -16,9 +16,9 @@ import * as MediaLibrary from "expo-media-library";
 import { FontAwesome5, SimpleLineIcons, FontAwesome } from "@expo/vector-icons";
 import { storage, firestoreDB } from "../../firebase/config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { useSelector } from "react-redux";
-import { useOrientationScreen } from "../../hooks/ScreenOrientation";
+import { useOrientationScreen } from "../../hooks/screenOrientation";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const orientation = useOrientationScreen();
@@ -98,7 +98,7 @@ export const CreatePostsScreen = ({ navigation }) => {
     uploadPostToServer();
 
     console.log("navigation", navigation);
-    navigation.navigate("DefaultScreen");
+    navigation.navigate("Публикации DS");
     setComment("");
     setTerrain("");
     setFoto(null);
@@ -120,6 +120,7 @@ export const CreatePostsScreen = ({ navigation }) => {
         likesNumber: 0,
         likes: [],
         isLiked: false,
+        timeOfCreation: new Timestamp.now().toMillis(),
       });
       console.log("Document written with ID: ", createPost.id);
     } catch (error) {

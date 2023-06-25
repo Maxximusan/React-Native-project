@@ -26,7 +26,7 @@ import {
 import dayjs from "dayjs";
 
 import { firestoreDB } from "../../firebase/config";
-import { useOrientationScreen } from "../../hooks/ScreenOrientation";
+import { useOrientationScreen } from "../../hooks/screenOrientation";
 
 export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
@@ -44,48 +44,6 @@ export const CommentScreen = ({ route }) => {
   const [commentsAmount, setCommentsAmount] = useState(0);
   const { nickName, userPhoto, userId } = useSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   const width = Dimensions.get("window").width;
-  //   const height = Dimensions.get("window").height;
-
-  //   width > height ? setScreenHorizontally(true) : setScreenHorizontally(false);
-  // }, []);
-
-  // useEffect(() => {
-  //   // const { height, width } = Dimensions.get("window");
-  //   const onChange = () => {
-  //     console.log("height", heightD);
-  //     console.log("width", width);
-
-  //     width > heightD
-  //       ? setScreenHorizontally(true)
-  //       : setScreenHorizontally(false);
-  //   };
-
-  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     dimensionsHandler?.remove();
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   const onChange = (result) => {
-  //     // setScreenInfo(result.screen);
-  //     // console.log("height", height);
-  //     // console.log("width", width);
-  //     console.log("resultscreen", result.window);
-  //     console.log("height", result.window.height);
-  //     console.log("width", result.window.width);
-
-  //     result.window.width > result.window.height
-  //       ? setScreenHorizontally(true)
-  //       : setScreenHorizontally(false);
-  //   };
-
-  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     dimensionsHandler?.remove();
-  //   };
-  // }, []);
 
   useEffect(() => {
     getAllPosts();

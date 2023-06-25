@@ -15,17 +15,13 @@ import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
 import { addLike, likedPosts } from "../../helpers/likeHandler";
-import { useOrientationScreen } from "../../hooks/ScreenOrientation";
+import { useOrientationScreen } from "../../hooks/screenOrientation";
 
 export const DefaultScreen = ({ route, navigation }) => {
-  // const { height, width } = Dimensions.get("window");
-  // const width = Dimensions.get("window").width;
-  // const height = Dimensions.get("window").height;
-  // const [screenInfo, setScreenInfo] = useState(Dimensions.get("screen"));
-  // const [screenHorizontally, setScreenHorizontally] = useState(false);
   const orientation = useOrientationScreen();
   console.log(orientation);
   const [posts, setPosts] = useState([]);
+  const [sortPosts, setSortPosts] = useState([]);
   const [updatedPosts, setUpdatedPosts] = useState([]);
 
   const { userId } = useSelector((state) => state.auth);
@@ -42,64 +38,34 @@ export const DefaultScreen = ({ route, navigation }) => {
     );
   };
 
-  // useEffect(() => {
-  //   const width = Dimensions.get("window").width;
-  //   const height = Dimensions.get("window").height;
-
-  //   width > height ? setScreenHorizontally(true) : setScreenHorizontally(false);
-  // }, []);
-
-  // useEffect(() => {
-  //   const { height, width } = Dimensions.get("window");
-  //   const onChange = () => {
-  //     console.log("height", height);
-  //     console.log("width", width);
-
-  //     width > height
-  //       ? setScreenHorizontally(true)
-  //       : setScreenHorizontally(false);
-  //   };
-
-  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     dimensionsHandler?.remove();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const onChange = (result) => {
-  //     // setScreenInfo(result.screen);
-  //     // console.log("height", height);
-  //     // console.log("width", width);
-  //     console.log("resultscreen", result.window);
-  //     console.log("height", result.window.height);
-  //     console.log("width", result.window.width);
-
-  //     setScreenInfo(result.screen);
-
-  //     // result.window.width > result.window.height
-  //     //   ? setScreenHorizontally(true)
-  //     //   : setScreenHorizontally(false);
-  //   };
-
-  //   const dimensionsHandler = Dimensions.addEventListener("change", onChange);
-  //   return () => {
-  //     dimensionsHandler?.remove();
-  //   };
-  // }, []);
-
   useEffect(() => {
     getAllPost();
   }, []);
 
   useEffect(() => {
-    setUpdatedPosts(likedPosts(posts, userId));
+    sortPostsByCreatedDate(posts);
   }, [posts]);
 
-  // console.log("posts", updatedPosts);
+  useEffect(() => {
+    setUpdatedPosts(likedPosts(sortPosts, userId));
+  }, [sortPosts]);
+
+  console.log("posts", updatedPosts);
   // console.log("что там с фото- 4", posts[3].userPhoto);
   // console.log("что там с фото- 5", posts[4].userPhoto);
   // console.log("updatedPosts", updatedPosts);
+
+  const sortPostsByCreatedDate = (allPosts) => {
+    let result = [...allPosts].sort((prev, next) => {
+      if (prev.timeOfCreation < next.timeOfCreation) {
+        return 1;
+      } else return -1;
+    });
+    console.log("RESULT- ALL POSTS", result);
+    setSortPosts(result);
+    return result;
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
