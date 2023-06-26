@@ -19,6 +19,7 @@ import { authLogInUser } from "../../../redux/auth/authOperations";
 
 import { ContextDimensions } from "../../../context/context";
 import { autoBatchEnhancer } from "@reduxjs/toolkit";
+import { useOrientationScreen } from "../../../hooks/screenOrientation";
 
 const initialState = {
   email: "",
@@ -27,9 +28,11 @@ const initialState = {
 
 export const LoginScreen = ({ navigation }) => {
   const { dimensions } = useContext(ContextDimensions);
+  const orientation = useOrientationScreen();
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  //Альтернатива outlineColor
   const [isFocused, setIsFocused] = useState({});
   const dispatch = useDispatch();
 
@@ -38,6 +41,7 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const keyboardHide = () => {
+    //Возможность скрывать клавиатуру при нажатии вне формы
     Keyboard.dismiss();
 
     setShowKeyboard(false);
@@ -105,7 +109,11 @@ export const LoginScreen = ({ navigation }) => {
                 />
 
                 <TouchableOpacity
-                  style={styles.showPassword}
+                  style={
+                    orientation.isPortrait
+                      ? styles.showPasswordOrientation
+                      : styles.showPassword
+                  }
                   onPress={putShowPassword}
                 >
                   <Text>{showPassword ? "Показать" : "Скрыть"}</Text>
@@ -238,7 +246,17 @@ const styles = StyleSheet.create({
   showPassword: {
     position: "absolute",
     top: 15,
-    left: 295,
+    left: 280,
+    // backgroundColor: '#FF6C00',
+    // color: "#FFF",
+    width: 71,
+    height: 19,
+    borderRadius: 50,
+  },
+  showPasswordOrientation: {
+    position: "absolute",
+    top: 15,
+    left: 610,
     // backgroundColor: '#FF6C00',
     // color: "#FFF",
     width: 71,

@@ -18,6 +18,7 @@ import { ContextDimensions } from "../../../context/context";
 import { authRegistrationUser } from "../../../redux/auth/authOperations";
 import { UserAvatar } from "../../../components/AvatarBox/UserAvatar";
 import { pickImageAsync } from "../../../helpers/imagePicker";
+import { useOrientationScreen } from "../../../hooks/screenOrientation";
 
 const initialState = {
   login: "",
@@ -28,6 +29,7 @@ const initialState = {
 
 export const RegistrationScreen = ({ navigation }) => {
   const { dimensions } = useContext(ContextDimensions);
+  const orientation = useOrientationScreen();
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -41,8 +43,7 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const deleteFoto = () => {
-    
-    setState((prevState) => ({ ...prevState, avatar: null}));
+    setState((prevState) => ({ ...prevState, avatar: null }));
   };
 
   const putShowPassword = () => {
@@ -142,7 +143,11 @@ export const RegistrationScreen = ({ navigation }) => {
                   />
 
                   <TouchableOpacity
-                    style={styles.showPassword}
+                    style={
+                      orientation.isPortrait
+                        ? styles.showPasswordOrientation
+                        : styles.showPassword
+                    }
                     onPress={putShowPassword}
                   >
                     <Text> {showPassword ? "Показать" : "Скрыть"}</Text>
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 16,
     paddingTop: 92,
-    paddingBottom: 25,
+    paddingBottom: 14,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     //    height: 549,
@@ -277,7 +282,17 @@ const styles = StyleSheet.create({
   showPassword: {
     position: "absolute",
     top: 15,
-    left: 290,
+    left: 280,
+    // backgroundColor: '#FF6C00',
+    // color: "#FFF",
+    width: 71,
+    height: 19,
+    borderRadius: 50,
+  },
+  showPasswordOrientation: {
+    position: "absolute",
+    top: 15,
+    left: 610,
     // backgroundColor: '#FF6C00',
     // color: "#FFF",
     width: 71,

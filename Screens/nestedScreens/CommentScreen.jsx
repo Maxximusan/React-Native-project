@@ -11,7 +11,6 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
-  Dimensions,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
@@ -38,7 +37,6 @@ export const CommentScreen = ({ route }) => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
-  // const [sortComments, setSortComments] = useState([]);
   const [commentsAmount, setCommentsAmount] = useState(0);
 
   const orientation = useOrientationScreen();
@@ -52,7 +50,6 @@ export const CommentScreen = ({ route }) => {
 
   useEffect(() => {
     updateCommentsAmount(allComments.length);
-    // sortCommentByCreatedDate(allComments);
   }, [allComments]);
 
   useEffect(() => {
@@ -96,17 +93,8 @@ export const CommentScreen = ({ route }) => {
     dayjs(comment.timeOfCreation).format("DD MMMM, YYYY | HH:mm");
     // console.log("LOOK", dayjs(comment.timeOfCreation).unix());
   });
-  console.log("sortedcomments", sortComments);
-  // const sortCommentByCreatedDate = (allComments) => {
-  //   let result = [...allComments].sort((prev, next) => {
-  //     if (prev.timeOfCreation > next.timeOfCreation) {
-  //       return 1;
-  //     } else return -1;
-  //   });
-  //   console.log("RESULT", result);
-  //   setSortComments(result);
-  //   return result;
-  // };
+  // console.log("sortedcomments", sortComments);
+
   const submitAddComment = async () => {
     await createComment();
     setComment("");
@@ -243,9 +231,7 @@ const styles = StyleSheet.create({
     // marginBottom: 28,
   },
   input: {
-    // minHeight: 50,
-    // maxHeight: 51,
-
+    
     paddingLeft: 16,
     borderWidth: 1,
     borderRadius: 30,

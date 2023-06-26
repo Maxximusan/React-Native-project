@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
-export const useSortComments = (posts) => {
+export const useSortComments = (comments) => {
   const [sortComments, setSortComments] = useState([]);
 
   useEffect(() => {
-    sortCommentsByCreatedDate(posts);
-  }, [posts]);
+    sortCommentsByCreatedDate(comments);
+  }, [comments]);
 
   const sortCommentsByCreatedDate = (allComments) => {
     let result = [...allComments].sort((prev, next) => {
@@ -13,7 +13,7 @@ export const useSortComments = (posts) => {
         return 1;
       } else return -1;
     });
-    console.log("SORTED-POSTS", result);
+    console.log("SORTED-coments", result);
     setSortComments(result);
     return result;
   };
