@@ -27,23 +27,24 @@ import dayjs from "dayjs";
 
 import { firestoreDB } from "../../firebase/config";
 import { useOrientationScreen } from "../../hooks/screenOrientation";
+import { useSortComments } from "../../hooks/sortComments";
 
 export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
   // или
   // const postId = route.params.postId;
-  // const width = Dimensions.get("window").width;
-  // const heightD = Dimensions.get("window").height;
-  // const [screenHorizontally, setScreenHorizontally] = useState(false);
-  const orientation = useOrientationScreen();
+
   const [height, setHeight] = useState(null);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
-  const [sortComments, setSortComments] = useState([]);
+  // const [sortComments, setSortComments] = useState([]);
   const [commentsAmount, setCommentsAmount] = useState(0);
-  const { nickName, userPhoto, userId } = useSelector((state) => state.auth);
 
+  const orientation = useOrientationScreen();
+  const sortComments = useSortComments(allComments);
+
+  const { nickName, userPhoto, userId } = useSelector((state) => state.auth);
 
   useEffect(() => {
     getAllPosts();
@@ -51,7 +52,7 @@ export const CommentScreen = ({ route }) => {
 
   useEffect(() => {
     updateCommentsAmount(allComments.length);
-    sortCommentByCreatedDate(allComments);
+    // sortCommentByCreatedDate(allComments);
   }, [allComments]);
 
   useEffect(() => {
@@ -96,16 +97,16 @@ export const CommentScreen = ({ route }) => {
     // console.log("LOOK", dayjs(comment.timeOfCreation).unix());
   });
   console.log("sortedcomments", sortComments);
-  const sortCommentByCreatedDate = (allComments) => {
-    let result = [...allComments].sort((prev, next) => {
-      if (prev.timeOfCreation > next.timeOfCreation) {
-        return 1;
-      } else return -1;
-    });
-    console.log("RESULT", result);
-    setSortComments(result);
-    return result;
-  };
+  // const sortCommentByCreatedDate = (allComments) => {
+  //   let result = [...allComments].sort((prev, next) => {
+  //     if (prev.timeOfCreation > next.timeOfCreation) {
+  //       return 1;
+  //     } else return -1;
+  //   });
+  //   console.log("RESULT", result);
+  //   setSortComments(result);
+  //   return result;
+  // };
   const submitAddComment = async () => {
     await createComment();
     setComment("");

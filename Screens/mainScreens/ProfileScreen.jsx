@@ -24,12 +24,15 @@ import {
   uploadNewUserAvatar,
 } from "../../helpers/addOrDelAvatarForProfile";
 import { useOrientationScreen } from "../../hooks/screenOrientation";
+import { useSortPosts } from "../../hooks/sortPosts";
 
 export const ProfileScreen = ({ navigation }) => {
-  const orientation = useOrientationScreen();
   const [userPosts, setUserPosts] = useState([]);
   const [updateUserPosts, setUpdateUserPosts] = useState([]);
-  // const [newUserAvatar, setNewUserAvatar] = useState(null);
+
+  const orientation = useOrientationScreen();
+  const sortPosts = useSortPosts(userPosts);
+
   const { userId, userPhoto } = useSelector((state) => state.auth);
 
   const { uid, displayName, photoURL } = auth.currentUser;
@@ -40,8 +43,8 @@ export const ProfileScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    setUpdateUserPosts(likedPosts(userPosts, userId));
-  }, [userPosts]);
+    setUpdateUserPosts(likedPosts(sortPosts, userId));
+  }, [sortPosts]);
 
   const getUserPosts = async () => {
     const q = query(
@@ -63,7 +66,6 @@ export const ProfileScreen = ({ navigation }) => {
 
   const getUserAvatar = async () => {
     const result = await pickImageAsync();
-    // setNewUserAvatar(result);
     const photoForDownload = await uploadNewUserAvatar(displayName, result);
     addUserPhoto(photoForDownload, dispatch);
     console.log("auth.currentUs", auth.currentUser);
@@ -75,7 +77,6 @@ export const ProfileScreen = ({ navigation }) => {
 
   const deleteAvatar = () => {
     deleteUserPhoto(dispatch);
-    // setNewUserAvatar(null);
   };
   return (
     <View style={styles.container}>

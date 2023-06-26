@@ -39,17 +39,44 @@ export const PostsList = (props) => {
             </View>
           ) : null}
 
-          <View style={{ marginBottom: 10 }}>
-            <Image
-              source={{ uri: item.photo }}
-              style={
-                isProfileScreen && orientation
-                  ? { width: 600, height: 260 }
-                  : { width: 360, height: 240 }
-              }
-            />
+          <View
+            style={
+              !isProfileScreen && orientation
+                ? {
+                    marginBottom: 10,
+                    // justifyContent: "center",
+                    alignItems: "center",
+                  }
+                : { marginBottom: 10 }
+            }
+          >
+            {isProfileScreen ? (
+              <Image
+                source={{ uri: item.photo }}
+                style={
+                  orientation
+                    ? { width: 600, height: 260 }
+                    : { width: 360, height: 240 }
+                }
+              />
+            ) : (
+              <Image
+                source={{ uri: item.photo }}
+                style={
+                  orientation
+                    ? { width: 300, height: 160 }
+                    : { width: 360, height: 240 }
+                }
+              />
+            )}
           </View>
-          <View style={{ marginBottom: 10 }}>
+          <View
+            style={
+              !isProfileScreen && orientation
+                ? { marginBottom: 10, alignItems: "center" }
+                : { marginBottom: 10 }
+            }
+          >
             <Text style={styles.postTitle}>{item.comment}</Text>
           </View>
 
