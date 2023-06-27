@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ActivityIndicator } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
@@ -8,6 +9,7 @@ import { PostsList } from "../../components/PostsList/PostList";
 import { likedPosts } from "../../helpers/likeHandler";
 import { useOrientationScreen } from "../../hooks/screenOrientation";
 import { useSortPosts } from "../../hooks/sortPosts";
+import { useLoaderOnScreenRotation } from "../../hooks/loader";
 
 export const DefaultScreen = ({ route, navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -16,6 +18,7 @@ export const DefaultScreen = ({ route, navigation }) => {
   const orientation = useOrientationScreen();
   console.log(orientation);
   const sortPosts = useSortPosts(updatedPosts);
+  const loader = useLoaderOnScreenRotation(orientation.isPortrait);
 
   const { userId } = useSelector((state) => state.auth);
 
@@ -35,25 +38,31 @@ export const DefaultScreen = ({ route, navigation }) => {
     getAllPost();
   }, []);
 
-  
   useEffect(() => {
     setUpdatedPosts(likedPosts(posts, userId));
   }, [posts]);
 
   // console.log("updatedPosts", updatedPosts);
 
- 
   return (
     <View style={styles.container}>
-      <PostsList
-        isProfileScreen={false}
-        updatedPostArray={sortPosts}
-        userId={userId}
-        navigation={navigation}
-        posts={posts}
-        orientation={orientation.isPortrait}
-      />
-      
+      {loader ? (
+        // <Spinner
+        //   visible={loader}
+        //   textContent={"LOADING..."}
+        //   textStyle={{ color: "red" }}
+        // />
+        <ActivityIndicator size="large" color="#00ff00" animating={loader} />
+      ) : (
+        <PostsList
+          isProfileScreen={false}
+          updatedPostArray={sortPosts}
+          userId={userId}
+          navigation={navigation}
+          posts={posts}
+          orientation={orientation.isPortrait}
+        />
+      )}
     </View>
   );
 };
@@ -65,5 +74,4 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     backgroundColor: "#fff",
   },
-
 });

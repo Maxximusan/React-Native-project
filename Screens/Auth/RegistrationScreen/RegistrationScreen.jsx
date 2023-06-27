@@ -11,14 +11,17 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useDispatch } from "react-redux";
+import Spinner from "react-native-loading-spinner-overlay";
 
 import { ContextDimensions } from "../../../context/context";
 import { authRegistrationUser } from "../../../redux/auth/authOperations";
 import { UserAvatar } from "../../../components/AvatarBox/UserAvatar";
 import { pickImageAsync } from "../../../helpers/imagePicker";
 import { useOrientationScreen } from "../../../hooks/screenOrientation";
+import { useLoaderOnScreenRotation } from "../../../hooks/loader";
 
 const initialState = {
   login: "",
@@ -30,6 +33,7 @@ const initialState = {
 export const RegistrationScreen = ({ navigation }) => {
   const { dimensions } = useContext(ContextDimensions);
   const orientation = useOrientationScreen();
+  const loader = useLoaderOnScreenRotation(orientation.isPortrait);
   const [state, setState] = useState(initialState);
   const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -63,115 +67,139 @@ export const RegistrationScreen = ({ navigation }) => {
     dispatch(authRegistrationUser(state));
   };
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.image}
-          source={require("../../../assets/images/Photo-BG.jpg")}
-        >
-          <View style={styles.formContainer}>
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              keyboardVerticalOffset={80}
+    <>
+      {loader ? (
+        // <Spinner
+        //   visible={loader}
+        //   textContent={"LOADING..."}
+        //   textStyle={{ color: "red" }}
+
+        // />
+        <ActivityIndicator size="large" color="#00ff00" animating={loader} />
+      ) : (
+        <TouchableWithoutFeedback onPress={keyboardHide}>
+          <View style={styles.container}>
+            <ImageBackground
+              style={styles.image}
+              source={require("../../../assets/images/Photo-BG.jpg")}
             >
-              <View style={{ ...styles.form, width: dimensions }}>
-                <UserAvatar
-                  getAvatarPhoto={getAvatarFoto}
-                  avatar={state.avatar}
-                  deleteAvatarPhoto={deleteFoto}
-                />
-                <View style={styles.header}>
-                  <Text style={styles.headerTitle}>Регистрация</Text>
-                </View>
-
-                <View style={{ marginBottom: 16 }}>
-                  <TextInput
-                    style={isFocused.login ? styles.inputActive : styles.input}
-                    textAlign={"left"}
-                    value={state.login}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, login: value }))
-                    }
-                    placeholder="Логин"
-                    placeholderTextColor={`#ff0000`}
-                    onFocus={() => {
-                      setShowKeyboard(true);
-                      setIsFocused({ login: true });
-                    }}
-                    onBlur={() => setIsFocused({})}
-                  />
-                </View>
-
-                <View style={{ marginBottom: 16 }}>
-                  <TextInput
-                    style={isFocused.email ? styles.inputActive : styles.input}
-                    textAlign={"left"}
-                    value={state.email}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, email: value }))
-                    }
-                    placeholder="Адресс электронной почты"
-                    placeholderTextColor={`#ff0000`}
-                    onFocus={() => {
-                      setShowKeyboard(true);
-                      setIsFocused({ email: true });
-                    }}
-                    onBlur={() => setIsFocused({})}
-                  />
-                </View>
-                <View style={{ marginBottom: 43 }}>
-                  <TextInput
-                    style={
-                      isFocused.password ? styles.inputActive : styles.input
-                    }
-                    textAlign={"left"}
-                    secureTextEntry={showPassword}
-                    value={state.password}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
-                    placeholder="Пароль"
-                    placeholderTextColor={`#ff0000`}
-                    onFocus={() => {
-                      setShowKeyboard(true);
-                      setIsFocused({ password: true });
-                    }}
-                    onBlur={() => setIsFocused({})}
-                  />
-
-                  <TouchableOpacity
-                    style={
-                      orientation.isPortrait
-                        ? styles.showPasswordOrientation
-                        : styles.showPassword
-                    }
-                    onPress={putShowPassword}
-                  >
-                    <Text> {showPassword ? "Показать" : "Скрыть"}</Text>
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={styles.btn}
-                  activeOpacity={0.4}
-                  onPress={submitForm}
+              <View style={styles.formContainer}>
+                <KeyboardAvoidingView
+                  behavior={Platform.OS === "ios" ? "padding" : "height"}
+                  keyboardVerticalOffset={80}
                 >
-                  <Text style={styles.btnTitle}>Зарегистрироваться</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ alignItems: "center" }}
-                  onPress={() => navigation.navigate("Login")}
-                >
-                  <Text style={styles.haveAcLog}>Уже есть аккаунт? Войти</Text>
-                </TouchableOpacity>
+                  <View style={{ ...styles.form, width: dimensions }}>
+                    <UserAvatar
+                      getAvatarPhoto={getAvatarFoto}
+                      avatar={state.avatar}
+                      deleteAvatarPhoto={deleteFoto}
+                    />
+                    <View style={styles.header}>
+                      <Text style={styles.headerTitle}>Регистрация</Text>
+                    </View>
+
+                    <View style={{ marginBottom: 16 }}>
+                      <TextInput
+                        style={
+                          isFocused.login ? styles.inputActive : styles.input
+                        }
+                        textAlign={"left"}
+                        value={state.login}
+                        onChangeText={(value) =>
+                          setState((prevState) => ({
+                            ...prevState,
+                            login: value,
+                          }))
+                        }
+                        placeholder="Логин"
+                        placeholderTextColor={`#ff0000`}
+                        onFocus={() => {
+                          setShowKeyboard(true);
+                          setIsFocused({ login: true });
+                        }}
+                        onBlur={() => setIsFocused({})}
+                      />
+                    </View>
+
+                    <View style={{ marginBottom: 16 }}>
+                      <TextInput
+                        style={
+                          isFocused.email ? styles.inputActive : styles.input
+                        }
+                        textAlign={"left"}
+                        value={state.email}
+                        onChangeText={(value) =>
+                          setState((prevState) => ({
+                            ...prevState,
+                            email: value,
+                          }))
+                        }
+                        placeholder="Адресс электронной почты"
+                        placeholderTextColor={`#ff0000`}
+                        onFocus={() => {
+                          setShowKeyboard(true);
+                          setIsFocused({ email: true });
+                        }}
+                        onBlur={() => setIsFocused({})}
+                      />
+                    </View>
+                    <View style={{ marginBottom: 43 }}>
+                      <TextInput
+                        style={
+                          isFocused.password ? styles.inputActive : styles.input
+                        }
+                        textAlign={"left"}
+                        secureTextEntry={showPassword}
+                        value={state.password}
+                        onChangeText={(value) =>
+                          setState((prevState) => ({
+                            ...prevState,
+                            password: value,
+                          }))
+                        }
+                        placeholder="Пароль"
+                        placeholderTextColor={`#ff0000`}
+                        onFocus={() => {
+                          setShowKeyboard(true);
+                          setIsFocused({ password: true });
+                        }}
+                        onBlur={() => setIsFocused({})}
+                      />
+
+                      <TouchableOpacity
+                        style={
+                          orientation.isPortrait
+                            ? styles.showPasswordOrientation
+                            : styles.showPassword
+                        }
+                        onPress={putShowPassword}
+                      >
+                        <Text> {showPassword ? "Показать" : "Скрыть"}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity
+                      style={styles.btn}
+                      activeOpacity={0.4}
+                      onPress={submitForm}
+                    >
+                      <Text style={styles.btnTitle}>Зарегистрироваться</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ alignItems: "center" }}
+                      onPress={() => navigation.navigate("Login")}
+                    >
+                      <Text style={styles.haveAcLog}>
+                        Уже есть аккаунт? Войти
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </KeyboardAvoidingView>
               </View>
-            </KeyboardAvoidingView>
+            </ImageBackground>
           </View>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      )}
+    </>
   );
 };
 
