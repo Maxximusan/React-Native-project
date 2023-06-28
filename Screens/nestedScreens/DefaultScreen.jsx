@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
-import Spinner from "react-native-loading-spinner-overlay";
+
 
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
@@ -47,11 +47,7 @@ export const DefaultScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       {loader ? (
-        // <Spinner
-        //   visible={loader}
-        //   textContent={"LOADING..."}
-        //   textStyle={{ color: "red" }}
-        // />
+        
         <ActivityIndicator size="large" color="#00ff00" animating={loader} />
       ) : (
         <PostsList

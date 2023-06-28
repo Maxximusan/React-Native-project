@@ -22,6 +22,7 @@ import { UserAvatar } from "../../../components/AvatarBox/UserAvatar";
 import { pickImageAsync } from "../../../helpers/imagePicker";
 import { useOrientationScreen } from "../../../hooks/screenOrientation";
 import { useLoaderOnScreenRotation } from "../../../hooks/loader";
+// import { AuthForm } from "../../../components/AuthForm/AuthForm";
 
 const initialState = {
   login: "",
@@ -73,7 +74,6 @@ export const RegistrationScreen = ({ navigation }) => {
         //   visible={loader}
         //   textContent={"LOADING..."}
         //   textStyle={{ color: "red" }}
-
         // />
         <ActivityIndicator size="large" color="#00ff00" animating={loader} />
       ) : (
@@ -88,12 +88,21 @@ export const RegistrationScreen = ({ navigation }) => {
                   behavior={Platform.OS === "ios" ? "padding" : "height"}
                   keyboardVerticalOffset={80}
                 >
+                  <UserAvatar
+                    getAvatarPhoto={getAvatarFoto}
+                    avatar={state.avatar}
+                    deleteAvatarPhoto={deleteFoto}
+                  />
+                  {/* <AuthForm
+                    isLoginScreen={false}
+                    orientation={orientation}
+                    navigation={navigation}
+                    setShowKeyboard={setShowKeyboard}
+                    state={state}
+                    setState={setState}
+                    submitForm={submitForm}
+                  /> */}
                   <View style={{ ...styles.form, width: dimensions }}>
-                    <UserAvatar
-                      getAvatarPhoto={getAvatarFoto}
-                      avatar={state.avatar}
-                      deleteAvatarPhoto={deleteFoto}
-                    />
                     <View style={styles.header}>
                       <Text style={styles.headerTitle}>Регистрация</Text>
                     </View>
@@ -188,7 +197,7 @@ export const RegistrationScreen = ({ navigation }) => {
                       style={{ alignItems: "center" }}
                       onPress={() => navigation.navigate("Login")}
                     >
-                      <Text style={styles.haveAcLog}>
+                      <Text style={styles.regOrLog}>
                         Уже есть аккаунт? Войти
                       </Text>
                     </TouchableOpacity>
@@ -300,7 +309,7 @@ const styles = StyleSheet.create({
     fontFamily: "roboto-500",
   },
 
-  haveAcLog: {
+  regOrLog: {
     fontFamily: "roboto-400",
     fontSize: 16,
     lineHeight: 19,

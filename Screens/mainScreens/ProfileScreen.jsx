@@ -7,6 +7,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -25,6 +26,7 @@ import {
 } from "../../helpers/addOrDelAvatarForProfile";
 import { useOrientationScreen } from "../../hooks/screenOrientation";
 import { useSortPosts } from "../../hooks/sortPosts";
+import { useLoaderOnScreenRotation } from "../../hooks/loader";
 
 export const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
@@ -32,6 +34,7 @@ export const ProfileScreen = ({ navigation }) => {
 
   const orientation = useOrientationScreen();
   const sortPosts = useSortPosts(userPosts);
+  const loader = useLoaderOnScreenRotation(orientation.isPortrait);
 
   const { userId, userPhoto } = useSelector((state) => state.auth);
 
@@ -80,48 +83,52 @@ export const ProfileScreen = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <ImageBackground
-        style={
-          orientation.isPortrait
-            ? { ...styles.image, paddingTop: 0 }
-            : styles.image
-        }
-        source={require("../../assets/images/Photo-BG.jpg")}
-      >
-        <View
+      {loader ? (
+        <ActivityIndicator size="large" color="#00ff00" animating={loader} />
+      ) : (
+        <ImageBackground
           style={
             orientation.isPortrait
-              ? { ...styles.profileContainer, paddingTop: 12 }
-              : styles.profileContainer
+              ? { ...styles.image, paddingTop: 0 }
+              : styles.image
           }
+          source={require("../../assets/images/Photo-BG.jpg")}
         >
-          <View style={orientation.isPortrait ? { display: "none" } : {}}>
-            <UserAvatar
-              getAvatarPhoto={getUserAvatar}
-              avatar={photoURL}
-              deleteAvatarPhoto={deleteAvatar}
-            />
-            <TouchableOpacity style={styles.profileLogoutBtn}>
-              <MaterialIcons
-                name="logout"
-                size={24}
-                color="#BDBDBD"
-                // color="#f50e0e"
-                onPress={() => logOut()}
+          <View
+            style={
+              orientation.isPortrait
+                ? { ...styles.profileContainer, paddingTop: 12 }
+                : styles.profileContainer
+            }
+          >
+            <View style={orientation.isPortrait ? { display: "none" } : {}}>
+              <UserAvatar
+                getAvatarPhoto={getUserAvatar}
+                avatar={photoURL}
+                deleteAvatarPhoto={deleteAvatar}
               />
-            </TouchableOpacity>
-            <Text style={styles.profileNickName}>{displayName}</Text>
+              <TouchableOpacity style={styles.profileLogoutBtn}>
+                <MaterialIcons
+                  name="logout"
+                  size={24}
+                  color="#BDBDBD"
+                  // color="#f50e0e"
+                  onPress={() => logOut()}
+                />
+              </TouchableOpacity>
+              <Text style={styles.profileNickName}>{displayName}</Text>
+            </View>
+            <PostsList
+              isProfileScreen={true}
+              updatedPostArray={updateUserPosts}
+              userId={userId}
+              navigation={navigation}
+              posts={userPosts}
+              orientation={orientation.isPortrait}
+            />
           </View>
-          <PostsList
-            isProfileScreen={true}
-            updatedPostArray={updateUserPosts}
-            userId={userId}
-            navigation={navigation}
-            posts={userPosts}
-            orientation={orientation.isPortrait}
-          />
-        </View>
-      </ImageBackground>
+        </ImageBackground>
+      )}
     </View>
   );
 };

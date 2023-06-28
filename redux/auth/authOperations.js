@@ -35,9 +35,9 @@ export const authRegistrationUser =
         email,
         password
       );
-
+      await updateProfile(user, { displayName: login });
       const userAvatar = await uploadUserAvatar(login, avatar);
-      await updateProfile(user, { displayName: login, photoURL: userAvatar });
+      await updateProfile(user, { photoURL: userAvatar });
       await updateEmail(user, email);
       const { displayName, uid, photoURL } = await auth.currentUser;
 

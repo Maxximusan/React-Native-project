@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { Camera, CameraType } from "expo-camera";
@@ -19,9 +20,11 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useOrientationScreen } from "../../hooks/screenOrientation";
+import { useLoaderOnScreenRotation } from "../../hooks/loader";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const orientation = useOrientationScreen();
+  const loader = useLoaderOnScreenRotation(orientation.isPortrait);
   const [snap, setSnap] = useState(null);
   const [foto, setFoto] = useState(null);
   const [comment, setComment] = useState("");
@@ -147,92 +150,96 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={213}
-      >
-        <View
-          style={
-            orientation.isPortrait
-              ? { flexDirection: "row", alignItems: "center" }
-              : {}
-          }
+      {loader ? (
+        <ActivityIndicator size="large" color="#00ff00" animating={loader} />
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={213}
         >
-          {isFocused && (
-            <Camera
-              style={
-                orientation.isPortrait
-                  ? { ...styles.camera, height: "85%", width: 400 }
-                  : styles.camera
-              }
-              type={type}
-              ref={setSnap}
+          <View
+            style={
+              orientation.isPortrait
+                ? { flexDirection: "row", alignItems: "center" }
+                : {}
+            }
+          >
+            {isFocused && (
+              <Camera
+                style={
+                  orientation.isPortrait
+                    ? { ...styles.camera, height: "85%", width: 400 }
+                    : styles.camera
+                }
+                type={type}
+                ref={setSnap}
+              >
+                {foto && (
+                  <View style={styles.takePhotoContainer}>
+                    <Image
+                      source={{ uri: foto }}
+                      style={{ height: 120, width: 120, borderRadius: 10 }}
+                    />
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={styles.snapContainer}
+                  onPress={takePhoto}
+                >
+                  <FontAwesome5 name="camera-retro" size={40} color="pink" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.changeCamera}
+                  onPress={() => toogleCameraType()}
+                >
+                  <FontAwesome name="exchange" size={30} color="white" />
+                </TouchableOpacity>
+              </Camera>
+            )}
+            <View
+              style={orientation.isPortrait ? { flexDirection: "column" } : {}}
             >
-              {foto && (
-                <View style={styles.takePhotoContainer}>
-                  <Image
-                    source={{ uri: foto }}
-                    style={{ height: 120, width: 120, borderRadius: 10 }}
+              <View style={styles.form}>
+                <View style={{ marginBottom: 32 }}>
+                  <TextInput
+                    style={styles.input}
+                    textAlign={"left"}
+                    placeholder="Название..."
+                    placeholderTextColor={`#ff0000`}
+                    value={comment}
+                    onChangeText={(text) => {
+                      setComment(text);
+                    }}
                   />
                 </View>
-              )}
-              <TouchableOpacity
-                style={styles.snapContainer}
-                onPress={takePhoto}
-              >
-                <FontAwesome5 name="camera-retro" size={40} color="pink" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.changeCamera}
-                onPress={() => toogleCameraType()}
-              >
-                <FontAwesome name="exchange" size={30} color="white" />
-              </TouchableOpacity>
-            </Camera>
-          )}
-          <View
-            style={orientation.isPortrait ? { flexDirection: "column" } : {}}
-          >
-            <View style={styles.form}>
-              <View style={{ marginBottom: 32 }}>
-                <TextInput
-                  style={styles.input}
-                  textAlign={"left"}
-                  placeholder="Название..."
-                  placeholderTextColor={`#ff0000`}
-                  value={comment}
-                  onChangeText={(text) => {
-                    setComment(text);
-                  }}
-                />
+                <View style={{ marginBottom: 32 }}>
+                  <SimpleLineIcons
+                    style={styles.terrainIcon}
+                    name="location-pin"
+                    size={24}
+                    color="#BDBDBD"
+                  />
+                  <TextInput
+                    style={styles.input}
+                    textAlign={"left"}
+                    placeholder="Местность..."
+                    placeholderTextColor={`#ff0000`}
+                    value={terrain}
+                    onChangeText={(text) => {
+                      setTerrain(text);
+                    }}
+                  />
+                </View>
               </View>
-              <View style={{ marginBottom: 32 }}>
-                <SimpleLineIcons
-                  style={styles.terrainIcon}
-                  name="location-pin"
-                  size={24}
-                  color="#BDBDBD"
-                />
-                <TextInput
-                  style={styles.input}
-                  textAlign={"left"}
-                  placeholder="Местность..."
-                  placeholderTextColor={`#ff0000`}
-                  value={terrain}
-                  onChangeText={(text) => {
-                    setTerrain(text);
-                  }}
-                />
+              <View>
+                <TouchableOpacity style={styles.sendBtn} onPress={sendPhoto}>
+                  <Text style={styles.sendTitle}> Опубликовать </Text>
+                </TouchableOpacity>
               </View>
-            </View>
-            <View>
-              <TouchableOpacity style={styles.sendBtn} onPress={sendPhoto}>
-                <Text style={styles.sendTitle}> Опубликовать </Text>
-              </TouchableOpacity>
             </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      )}
     </View>
   );
 };
