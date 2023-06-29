@@ -18,11 +18,11 @@ import {
 import { useDispatch } from "react-redux";
 import { authLogInUser } from "../../../redux/auth/authOperations";
 
-import { ContextDimensions } from "../../../context/context";
+// import { ContextDimensions } from "../../../context/context";
 import { autoBatchEnhancer } from "@reduxjs/toolkit";
 import { useOrientationScreen } from "../../../hooks/screenOrientation";
 import { useLoaderOnScreenRotation } from "../../../hooks/loader";
-// import { AuthForm } from "../../../components/AuthForm/AuthForm";
+import { AuthForm } from "../../../components/AuthForm/AuthForm";
 
 const initialState = {
   email: "",
@@ -30,19 +30,19 @@ const initialState = {
 };
 
 export const LoginScreen = ({ navigation }) => {
-  const { dimensions } = useContext(ContextDimensions);
+  // const { dimensions } = useContext(ContextDimensions);
   const orientation = useOrientationScreen();
   const loader = useLoaderOnScreenRotation(orientation.isPortrait);
   const [state, setState] = useState(initialState);
-  const [showPassword, setShowPassword] = useState(true);
+  // const [showPassword, setShowPassword] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
   //Альтернатива outlineColor
-  const [isFocused, setIsFocused] = useState({});
+  // const [isFocused, setIsFocused] = useState({});
   const dispatch = useDispatch();
 
-  const putShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
+  // const putShowPassword = () => {
+  //   setShowPassword((prev) => !prev);
+  // };
 
   const keyboardHide = () => {
     //Возможность скрывать клавиатуру при нажатии вне формы
@@ -73,7 +73,7 @@ export const LoginScreen = ({ navigation }) => {
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
                 keyboardVerticalOffset={250}
               >
-                {/* <AuthForm
+                <AuthForm
                   isLoginScreen={true}
                   orientation={orientation}
                   navigation={navigation}
@@ -81,8 +81,8 @@ export const LoginScreen = ({ navigation }) => {
                   state={state}
                   setState={setState}
                   submitForm={submitForm}
-                /> */}
-                <View style={{ ...styles.form, width: dimensions }}>
+                />
+                {/* <View style={{ ...styles.form, width: dimensions }}>
                   <View style={styles.header}>
                     <Text style={styles.headerTitle}>Войти</Text>
                   </View>
@@ -158,7 +158,7 @@ export const LoginScreen = ({ navigation }) => {
                       Нет аккаунта? Зарегистрироваться
                     </Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </KeyboardAvoidingView>
             </View>
           </View>
@@ -192,101 +192,101 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
 
-  form: {
-    // marginHorizontal: 40,
-    // marginBottom: 40,
-    // backgroundColor: "#fff",
-    // padding: 92 16 78 16
-    // paddingHorizontal: 16,
-  },
+  // form: {
+  //   // marginHorizontal: 40,
+  //   // marginBottom: 40,
+  //   // backgroundColor: "#fff",
+  //   // padding: 92 16 78 16
+  //   // paddingHorizontal: 16,
+  // },
 
-  input: {
-    fontFamily: "roboto-400",
-    fontSize: 16,
-    lineHeight: 19,
-    height: 50,
-    paddingLeft: 16,
+  // input: {
+  //   fontFamily: "roboto-400",
+  //   fontSize: 16,
+  //   lineHeight: 19,
+  //   height: 50,
+  //   paddingLeft: 16,
 
-    borderWidth: 1,
-    borderColor: `#90ee90`,
-    borderRadius: 8,
-    backgroundColor: "#F6F6F6",
-    color: `#212121`,
+  //   borderWidth: 1,
+  //   borderColor: `#90ee90`,
+  //   borderRadius: 8,
+  //   backgroundColor: "#F6F6F6",
+  //   color: `#212121`,
 
-    //   outLineColor: "#FF6C00",
-    // outLineWidth: 4,
-    // outLineStyle: "solid",
-  },
-  inputActive: {
-    fontFamily: "roboto-400",
-    fontSize: 16,
-    lineHeight: 19,
-    height: 50,
-    paddingLeft: 16,
+  //   //   outLineColor: "#FF6C00",
+  //   // outLineWidth: 4,
+  //   // outLineStyle: "solid",
+  // },
+  // inputActive: {
+  //   fontFamily: "roboto-400",
+  //   fontSize: 16,
+  //   lineHeight: 19,
+  //   height: 50,
+  //   paddingLeft: 16,
 
-    borderWidth: 1,
-    borderColor: `#FF6C00`,
-    borderRadius: 8,
-    backgroundColor: "#FFFFFF",
-    color: `#212121`,
-  },
+  //   borderWidth: 1,
+  //   borderColor: `#FF6C00`,
+  //   borderRadius: 8,
+  //   backgroundColor: "#FFFFFF",
+  //   color: `#212121`,
+  // },
 
-  btn: {
-    height: 51,
-    borderRadius: 100,
-    borderWidth: 1,
-    // marginHorizontal: 16,
-    justifyContent: "center",
-    alignItems: "center",
+  // btn: {
+  //   height: 51,
+  //   borderRadius: 100,
+  //   borderWidth: 1,
+  //   // marginHorizontal: 16,
+  //   justifyContent: "center",
+  //   alignItems: "center",
 
-    backgroundColor: "#FF6C00",
-    borderColor: "transparent",
-    marginBottom: 16,
-  },
+  //   backgroundColor: "#FF6C00",
+  //   borderColor: "transparent",
+  //   marginBottom: 16,
+  // },
 
-  btnTitle: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    lineHeight: 19,
-    fontFamily: "roboto-400",
-  },
+  // btnTitle: {
+  //   color: "#FFFFFF",
+  //   fontSize: 16,
+  //   lineHeight: 19,
+  //   fontFamily: "roboto-400",
+  // },
 
-  header: {
-    alignItems: "center",
-    marginBottom: 33,
-  },
+  // header: {
+  //   alignItems: "center",
+  //   marginBottom: 33,
+  // },
 
-  headerTitle: {
-    fontSize: 30,
-    lineHeight: 35,
-    color: `#212121`,
-    fontFamily: "roboto-500",
-  },
+  // headerTitle: {
+  //   fontSize: 30,
+  //   lineHeight: 35,
+  //   color: `#212121`,
+  //   fontFamily: "roboto-500",
+  // },
 
-  regOrLog: {
-    fontFamily: "roboto-400",
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#1B4371",
-  },
-  showPassword: {
-    position: "absolute",
-    top: 15,
-    left: 280,
-    // backgroundColor: '#FF6C00',
-    // color: "#FFF",
-    width: 71,
-    height: 19,
-    borderRadius: 50,
-  },
-  showPasswordOrientation: {
-    position: "absolute",
-    top: 15,
-    left: 610,
-    // backgroundColor: '#FF6C00',
-    // color: "#FFF",
-    width: 71,
-    height: 19,
-    borderRadius: 50,
-  },
+  // regOrLog: {
+  //   fontFamily: "roboto-400",
+  //   fontSize: 16,
+  //   lineHeight: 19,
+  //   color: "#1B4371",
+  // },
+  // showPassword: {
+  //   position: "absolute",
+  //   top: 15,
+  //   left: 280,
+  //   // backgroundColor: '#FF6C00',
+  //   // color: "#FFF",
+  //   width: 71,
+  //   height: 19,
+  //   borderRadius: 50,
+  // },
+  // showPasswordOrientation: {
+  //   position: "absolute",
+  //   top: 15,
+  //   left: 610,
+  //   // backgroundColor: '#FF6C00',
+  //   // color: "#FFF",
+  //   width: 71,
+  //   height: 19,
+  //   borderRadius: 50,
+  // },
 });

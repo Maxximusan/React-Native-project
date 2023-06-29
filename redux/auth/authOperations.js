@@ -36,8 +36,10 @@ export const authRegistrationUser =
         password
       );
       await updateProfile(user, { displayName: login });
-      const userAvatar = await uploadUserAvatar(login, avatar);
-      await updateProfile(user, { photoURL: userAvatar });
+      if (avatar) {
+        const userAvatar = await uploadUserAvatar(login, avatar);
+        await updateProfile(user, { photoURL: userAvatar });
+      }
       await updateEmail(user, email);
       const { displayName, uid, photoURL } = await auth.currentUser;
 
