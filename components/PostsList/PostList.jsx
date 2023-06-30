@@ -18,6 +18,7 @@ export const PostsList = (props) => {
     navigation,
     posts,
     orientation,
+    deletePost,
   } = props;
 
   return (
@@ -65,7 +66,7 @@ export const PostsList = (props) => {
                 style={
                   orientation
                     ? { width: 300, height: 160 }
-                    : { width: 360, height: 240 }
+                    : { width: 380, height: 240 }
                 }
               />
             )}
@@ -127,6 +128,11 @@ export const PostsList = (props) => {
               <Octicons name="location" size={20} color="#BDBDBD" />
               <Text style={styles.locationItemText}>{item.terrain}</Text>
             </TouchableOpacity>
+            {isProfileScreen && (
+              <TouchableOpacity onPress={() => deletePost(item.id)}>
+                <AntDesign name="delete" size={24} color="#5e3974" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       )}

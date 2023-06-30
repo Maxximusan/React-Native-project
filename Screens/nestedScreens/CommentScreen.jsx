@@ -32,6 +32,7 @@ import { useLoaderOnScreenRotation } from "../../hooks/loader";
 
 export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
+
   // или
   // const postId = route.params.postId;
 
@@ -72,9 +73,9 @@ export const CommentScreen = ({ route }) => {
         }
       );
 
-      console.log("Document written with ID: ", docRef.id);
+      console.log("Document 'comments' written with ID: ", docRef.id);
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error adding document 'comments': ", error);
     }
   };
 

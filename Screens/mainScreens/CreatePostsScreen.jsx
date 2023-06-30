@@ -92,8 +92,7 @@ export const CreatePostsScreen = ({ navigation }) => {
 
       setLocation(location);
     } catch (error) {
-      console.log(error);
-      console.log(error.message);
+      console.log("takePhoto error", error);
     }
   };
 
@@ -125,9 +124,9 @@ export const CreatePostsScreen = ({ navigation }) => {
         isLiked: false,
         timeOfCreation: new Timestamp.now().toMillis(),
       });
-      console.log("Document written with ID: ", createPost.id);
+      console.log("Document 'posts' written with ID: ", createPost.id);
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error("Error adding document 'posts': ", error);
     }
   };
 

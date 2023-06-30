@@ -11,7 +11,15 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  query,
+  where,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { firestoreDB, auth } from "../../firebase/config";
 import { UserAvatar } from "../../components/AvatarBox/UserAvatar";
 import { authLogOutUser } from "../../redux/auth/authOperations";
@@ -68,10 +76,39 @@ export const ProfileScreen = ({ navigation }) => {
   };
 
   const getUserAvatar = async () => {
-    const result = await pickImageAsync();
-    const photoForDownload = await uploadNewUserAvatar(displayName, result);
-    addUserPhoto(photoForDownload, dispatch);
-    console.log("auth.currentUs", auth.currentUser);
+    try {
+      const result = await pickImageAsync();
+      const photoForDownload = await uploadNewUserAvatar(displayName, result);
+      addUserPhoto(photoForDownload, dispatch);
+      console.log("auth.currentUs", auth.currentUser);
+    } catch (error) {
+      console.log("getUserAvatar-error:", error);
+    }
+  };
+
+  const deleteCommentsForPost = async (id) => {
+    try {
+      const allPostComments = await getDocs(
+        collection(firestoreDB, "posts", id, "comments")
+      ).then((res) => {
+        res.forEach((element) => {
+          console.log("fuck FUCK", element);
+          deleteDoc(doc(firestoreDB, "posts", id, "comments", element.id));
+        });
+      });
+      return allPostComments;
+    } catch (error) {
+      console.log("deleteCommentsForPost", error);
+    }
+  };
+
+  const deletePostFromFirebase = async (id) => {
+    try {
+      const goodByePost = await deleteDoc(doc(firestoreDB, "posts", id));
+      return goodByePost;
+    } catch (error) {
+      console.log("deletePostFromFirebase", error);
+    }
   };
 
   const logOut = () => {
@@ -81,6 +118,16 @@ export const ProfileScreen = ({ navigation }) => {
   const deleteAvatar = () => {
     deleteUserPhoto(dispatch);
   };
+
+  const deletePost = (id) => {
+    //тут не хватает потдверждения пользователя
+    deleteCommentsForPost(id);
+    deletePostFromFirebase(id);
+  };
+
+  // console.log("updateUserPosts", updateUserPosts);
+  // console.log("userPosts", userPosts);
+
   return (
     <View style={styles.container}>
       {loader ? (
@@ -125,6 +172,7 @@ export const ProfileScreen = ({ navigation }) => {
               navigation={navigation}
               posts={userPosts}
               orientation={orientation.isPortrait}
+              deletePost={deletePost}
             />
           </View>
         </ImageBackground>

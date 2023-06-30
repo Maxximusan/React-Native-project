@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 
-
 import { collection, onSnapshot } from "firebase/firestore";
 import { firestoreDB } from "../../firebase/config";
 import { PostsList } from "../../components/PostsList/PostList";
@@ -16,7 +15,7 @@ export const DefaultScreen = ({ route, navigation }) => {
   const [updatedPosts, setUpdatedPosts] = useState([]);
 
   const orientation = useOrientationScreen();
-  console.log(orientation);
+  // console.log(orientation);
   const sortPosts = useSortPosts(updatedPosts);
   const loader = useLoaderOnScreenRotation(orientation.isPortrait);
 
@@ -47,7 +46,6 @@ export const DefaultScreen = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       {loader ? (
-        
         <ActivityIndicator size="large" color="#00ff00" animating={loader} />
       ) : (
         <PostsList

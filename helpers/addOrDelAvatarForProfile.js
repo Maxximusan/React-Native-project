@@ -20,7 +20,7 @@ export const deleteUserPhoto = async (dispatch) => {
       })
     );
 
-    console.log("DELETE - OK!");
+    console.log("Delete user photo - OK!");
   } catch (error) {
     console.log("error.message", error.message);
   }
