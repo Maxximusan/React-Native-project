@@ -3,3 +3,4 @@
 import { createContext } from "react";
 
 export const ContextDimensions = createContext();
+export const ContextUserRemovesPost = createContext();

@@ -35,6 +35,7 @@ import {
 import { useOrientationScreen } from "../../hooks/screenOrientation";
 import { useSortPosts } from "../../hooks/sortPosts";
 import { useLoaderOnScreenRotation } from "../../hooks/loader";
+import { ContextUserRemovesPost } from "../../context/context";
 
 export const ProfileScreen = ({ navigation }) => {
   const [userPosts, setUserPosts] = useState([]);
@@ -120,7 +121,6 @@ export const ProfileScreen = ({ navigation }) => {
   };
 
   const deletePost = (id) => {
-    //тут не хватает потдверждения пользователя
     deleteCommentsForPost(id);
     deletePostFromFirebase(id);
   };
@@ -165,15 +165,17 @@ export const ProfileScreen = ({ navigation }) => {
               </TouchableOpacity>
               <Text style={styles.profileNickName}>{displayName}</Text>
             </View>
-            <PostsList
-              isProfileScreen={true}
-              updatedPostArray={updateUserPosts}
-              userId={userId}
-              navigation={navigation}
-              posts={userPosts}
-              orientation={orientation.isPortrait}
-              deletePost={deletePost}
-            />
+            <ContextUserRemovesPost.Provider value={deletePost}>
+              <PostsList
+                isProfileScreen={true}
+                updatedPostArray={updateUserPosts}
+                userId={userId}
+                navigation={navigation}
+                posts={userPosts}
+                orientation={orientation.isPortrait}
+                // deletePost={deletePost}
+              />
+            </ContextUserRemovesPost.Provider>
           </View>
         </ImageBackground>
       )}

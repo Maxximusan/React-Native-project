@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import {
   View,
   Image,
@@ -6,9 +8,11 @@ import {
   Button,
   Text,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { FontAwesome, AntDesign, Octicons } from "@expo/vector-icons";
 import { addLike } from "../../helpers/likeHandler";
+import { ModalForDelPost } from "../Modal/ModalForDelPost";
 
 export const PostsList = (props) => {
   const {
@@ -18,125 +22,143 @@ export const PostsList = (props) => {
     navigation,
     posts,
     orientation,
-    deletePost,
+    // deletePost,
   } = props;
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [idFromFlatlist, setIdFromFlatlist] = useState(false);
+
+  const showModal = (itemId) => {
+    setModalVisible(true);
+    setIdFromFlatlist(itemId);
+  };
+
   return (
-    <FlatList
-      data={updatedPostArray}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <View style={styles.post}>
-          {!isProfileScreen ? (
-            <View style={styles.userInfoContainer}>
-              <Image
-                style={styles.userPhoto}
-                source={{ uri: item.userPhoto }}
-              />
-              <View style={styles.userInfo}>
-                <Text style={styles.nickName}>{item.nickName}</Text>
-                <Text style={styles.userEmail}>{item.userEmail}</Text>
+    <>
+      <FlatList
+        data={updatedPostArray}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.post}>
+            {!isProfileScreen ? (
+              <View style={styles.userInfoContainer}>
+                <Image
+                  style={styles.userPhoto}
+                  source={{ uri: item.userPhoto }}
+                />
+                <View style={styles.userInfo}>
+                  <Text style={styles.nickName}>{item.nickName}</Text>
+                  <Text style={styles.userEmail}>{item.userEmail}</Text>
+                </View>
               </View>
-            </View>
-          ) : null}
+            ) : null}
 
-          <View
-            style={
-              !isProfileScreen && orientation
-                ? {
-                    marginBottom: 10,
-                    // justifyContent: "center",
-                    alignItems: "center",
-                  }
-                : { marginBottom: 10 }
-            }
-          >
-            {isProfileScreen ? (
-              <Image
-                source={{ uri: item.photo }}
-                style={
-                  orientation
-                    ? { width: 600, height: 260 }
-                    : { width: 360, height: 240 }
-                }
-              />
-            ) : (
-              <Image
-                source={{ uri: item.photo }}
-                style={
-                  orientation
-                    ? { width: 300, height: 160 }
-                    : { width: 380, height: 240 }
-                }
-              />
-            )}
-          </View>
-          <View
-            style={
-              !isProfileScreen && orientation
-                ? { marginBottom: 10, alignItems: "center" }
-                : { marginBottom: 10 }
-            }
-          >
-            <Text style={styles.postTitle}>{item.comment}</Text>
-          </View>
-
-          <View style={styles.statsContainer}>
             <View
-              style={{
-                flexDirection: "row",
-
-                alignItems: "center",
-              }}
+              style={
+                !isProfileScreen && orientation
+                  ? {
+                      marginBottom: 10,
+                      // justifyContent: "center",
+                      alignItems: "center",
+                    }
+                  : { marginBottom: 10 }
+              }
             >
+              {isProfileScreen ? (
+                <Image
+                  source={{ uri: item.photo }}
+                  style={
+                    orientation
+                      ? { width: 600, height: 260 }
+                      : { width: 360, height: 240 }
+                  }
+                />
+              ) : (
+                <Image
+                  source={{ uri: item.photo }}
+                  style={
+                    orientation
+                      ? { width: 300, height: 160 }
+                      : { width: 360, height: 240 }
+                  }
+                />
+              )}
+            </View>
+            <View
+              style={
+                !isProfileScreen && orientation
+                  ? { marginBottom: 10, alignItems: "center" }
+                  : { marginBottom: 10 }
+              }
+            >
+              <Text style={styles.postTitle}>{item.comment}</Text>
+            </View>
+
+            <View style={styles.statsContainer}>
+              <View
+                style={{
+                  flexDirection: "row",
+
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  style={{ flexDirection: "row" }}
+                  onPress={() =>
+                    navigation.navigate("Comments", {
+                      postId: item.id,
+                      photo: item.photo,
+                    })
+                  }
+                >
+                  <FontAwesome
+                    name="comment"
+                    size={24}
+                    color={item.commentsAmount === 0 ? "#BDBDBD" : "#FF6C00"}
+                  />
+                  <Text style={styles.commentsAmount}>
+                    {item.commentsAmount}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => addLike(posts, item.id, userId)}
+                  style={{ flexDirection: "row", marginLeft: 25 }}
+                >
+                  <AntDesign
+                    name="like2"
+                    size={18}
+                    color={!item.isLiked ? "#BDBDBD" : "#FF6C00"}
+                  />
+                  <Text style={{ color: "#212121", marginLeft: 5 }}>
+                    {item.likesNumber}
+                  </Text>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity
                 style={{ flexDirection: "row" }}
-                onPress={() =>
-                  navigation.navigate("Comments", {
-                    postId: item.id,
-                    photo: item.photo,
-                  })
-                }
+                onPress={() => {
+                  navigation.navigate("Map", { location: item.location });
+                }}
               >
-                <FontAwesome
-                  name="comment"
-                  size={24}
-                  color={item.commentsAmount === 0 ? "#BDBDBD" : "#FF6C00"}
-                />
-                <Text style={styles.commentsAmount}>{item.commentsAmount}</Text>
+                <Octicons name="location" size={20} color="#BDBDBD" />
+                <Text style={styles.locationItemText}>{item.terrain}</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => addLike(posts, item.id, userId)}
-                style={{ flexDirection: "row", marginLeft: 25 }}
-              >
-                <AntDesign
-                  name="like2"
-                  size={18}
-                  color={!item.isLiked ? "#BDBDBD" : "#FF6C00"}
-                />
-                <Text style={{ color: "#212121", marginLeft: 5 }}>
-                  {item.likesNumber}
-                </Text>
-              </TouchableOpacity>
+              {isProfileScreen && (
+                <Pressable onPress={() => showModal(item.id)}>
+                  <AntDesign name="delete" size={24} color="#5e3974" />
+                </Pressable>
+              )}
             </View>
-            <TouchableOpacity
-              style={{ flexDirection: "row" }}
-              onPress={() => {
-                navigation.navigate("Map", { location: item.location });
-              }}
-            >
-              <Octicons name="location" size={20} color="#BDBDBD" />
-              <Text style={styles.locationItemText}>{item.terrain}</Text>
-            </TouchableOpacity>
-            {isProfileScreen && (
-              <TouchableOpacity onPress={() => deletePost(item.id)}>
-                <AntDesign name="delete" size={24} color="#5e3974" />
-              </TouchableOpacity>
-            )}
           </View>
-        </View>
-      )}
-    />
+        )}
+      />
+      <ModalForDelPost
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        itemId={idFromFlatlist}
+        // deletePost={deletePost}
+      />
+    </>
   );
 };
 
