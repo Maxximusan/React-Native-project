@@ -15,7 +15,6 @@ export const DefaultScreen = ({ route, navigation }) => {
   const [updatedPosts, setUpdatedPosts] = useState([]);
 
   const orientation = useOrientationScreen();
-  // console.log(orientation);
   const sortPosts = useSortPosts(updatedPosts);
   const loader = useLoaderOnScreenRotation(orientation.isPortrait);
 
@@ -41,8 +40,7 @@ export const DefaultScreen = ({ route, navigation }) => {
     setUpdatedPosts(likedPosts(posts, userId));
   }, [posts]);
 
-  // console.log("updatedPosts", updatedPosts);
-
+  
   return (
     <View style={styles.container}>
       {loader ? (

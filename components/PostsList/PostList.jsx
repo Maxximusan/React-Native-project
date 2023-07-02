@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   FlatList,
-  Button,
   Text,
   TouchableOpacity,
   Pressable,
@@ -22,7 +21,6 @@ export const PostsList = (props) => {
     navigation,
     posts,
     orientation,
-    // deletePost,
   } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,7 +56,6 @@ export const PostsList = (props) => {
                 !isProfileScreen && orientation
                   ? {
                       marginBottom: 10,
-                      // justifyContent: "center",
                       alignItems: "center",
                     }
                   : { marginBottom: 10 }
@@ -156,7 +153,6 @@ export const PostsList = (props) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         itemId={idFromFlatlist}
-        // deletePost={deletePost}
       />
     </>
   );
@@ -201,7 +197,6 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // alignContent: "space-between",
     alignItems: "center",
   },
 

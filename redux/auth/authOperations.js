@@ -12,18 +12,22 @@ import { auth, storage } from "../../firebase/config";
 import { authSlice } from "./authReducer";
 
 export const uploadUserAvatar = async (login, avatar) => {
-  const response = await fetch(avatar);
-  const file = await response.blob();
-  const uniqueAvatarId = Date.now().toString();
-  const storageRef = ref(storage, `usersAvatars/${login}${uniqueAvatarId}`);
-  console.log("storageRefAVATAR", storageRef);
-  const data = await uploadBytes(storageRef, file);
-  console.log("dataAVATAR", data);
+  try {
+    const response = await fetch(avatar);
+    const file = await response.blob();
+    const uniqueAvatarId = Date.now().toString();
+    const storageRef = ref(storage, `usersAvatars/${login}${uniqueAvatarId}`);
 
-  const avatarUrl = await getDownloadURL(
-    ref(storage, `usersAvatars/${login}${uniqueAvatarId}`)
-  );
-  return avatarUrl;
+    await uploadBytes(storageRef, file);
+
+    const avatarUrl = await getDownloadURL(
+      ref(storage, `usersAvatars/${login}${uniqueAvatarId}`)
+    );
+
+    return avatarUrl;
+  } catch (error) {
+    console.log("uploadUserAvatar - error:", error);
+  }
 };
 
 export const authRegistrationUser =
@@ -51,10 +55,8 @@ export const authRegistrationUser =
           userPhoto: photoURL,
         })
       );
-      console.log("user", user);
     } catch (error) {
-      console.log("error", error);
-      console.log("error.message", error.message);
+      console.log("authRegistrationUser - error:", error);
     }
   };
 
@@ -62,11 +64,9 @@ export const authLogInUser =
   ({ email, password }) =>
   async (dispatch, getState) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log("user", user);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log("error", error);
-      console.log("error.message", error.message);
+      console.log("authLogInUser - error:", error);
     }
   };
 
@@ -86,6 +86,10 @@ export const authStateChangeUser = () => async (dispatch, getState) => {
 };
 
 export const authLogOutUser = () => async (dispatch, getState) => {
-  await signOut(auth);
-  dispatch(authSlice.actions.authLogOut());
+  try {
+    await signOut(auth);
+    dispatch(authSlice.actions.authLogOut());
+  } catch (error) {
+    console.log("authLogOutUser - error:", error);
+  }
 };

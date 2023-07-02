@@ -43,7 +43,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log("status", status);
+      // console.log("status", status);
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
@@ -82,24 +82,24 @@ export const CreatePostsScreen = ({ navigation }) => {
       const location = await Location.getCurrentPositionAsync();
 
       const savePhoto = await MediaLibrary.createAssetAsync(photo.uri);
-      console.log("location", location);
+      // console.log("location", location);
       // console.log("lalitude", location.coords.latitude);
       // console.log("longitude", location.coords.longitude);
       setFoto(photo.uri);
 
-      console.log("photo", photo);
+      // console.log("photo", photo);
       console.log("SAVEphoto", savePhoto);
 
       setLocation(location);
     } catch (error) {
-      console.log("takePhoto error", error);
+      console.log("takePhoto- error:", error);
     }
   };
 
   const sendPhoto = () => {
     uploadPostToServer();
 
-    console.log("navigation", navigation);
+    // console.log("navigation", navigation);
     navigation.navigate("Публикации DS");
     setComment("");
     setTerrain("");
@@ -135,14 +135,14 @@ export const CreatePostsScreen = ({ navigation }) => {
     const file = await response.blob();
     const uniquePostId = Date.now().toString();
     const storageRef = ref(storage, `postImage/${uniquePostId}`);
-    console.log("storageRef", storageRef);
+    // console.log("storageRef", storageRef);
     const data = await uploadBytes(storageRef, file);
     console.log("data", data);
 
     const processedPhoto = await getDownloadURL(
       ref(storage, `postImage/${uniquePostId}`)
     );
-    console.log("processedPhoto", processedPhoto);
+    // console.log("processedPhoto", processedPhoto);
 
     return processedPhoto;
   };
@@ -285,7 +285,6 @@ const styles = StyleSheet.create({
     borderColor: `#7fff00`,
     backgroundColor: `#32cd32`,
     borderRadius: 15,
-    // marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -294,7 +293,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   form: {
-    // backgroundColor: "#8f7474",
+    
     paddingHorizontal: 16,
     marginTop: 45,
     borderWidth: 1,

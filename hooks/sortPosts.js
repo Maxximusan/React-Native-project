@@ -13,7 +13,7 @@ export const useSortPosts = (posts) => {
         return 1;
       } else return -1;
     });
-    console.log("SORTED-POSTS", result);
+    // console.log("SORTED-POSTS", result);
     setSortPosts(result);
     return result;
   };

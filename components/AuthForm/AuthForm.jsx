@@ -29,7 +29,7 @@ export const AuthForm = (props) => {
   const putShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
-  console.log(state);
+  // console.log(state);
   return (
     <View style={{ width: dimensions }}>
       <View style={styles.header}>
@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
     height: 51,
     borderRadius: 100,
     borderWidth: 1,
-    // marginHorizontal: 16,
     justifyContent: "center",
     alignItems: "center",
 
@@ -214,8 +213,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 15,
     left: 280,
-    // backgroundColor: '#FF6C00',
-    // color: "#FFF",
     width: 71,
     height: 19,
     borderRadius: 50,
@@ -224,8 +221,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 15,
     left: 610,
-    // backgroundColor: '#FF6C00',
-    // color: "#FFF",
     width: 71,
     height: 19,
     borderRadius: 50,

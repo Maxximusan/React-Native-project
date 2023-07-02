@@ -10,7 +10,7 @@ export const ModalForDelPost = (props) => {
     postDelete(itemId);
     setModalVisible(!modalVisible);
   };
-  console.log(modalVisible);
+  // console.log(modalVisible);
   return (
     <View style={styles.centeredView}>
       <Modal

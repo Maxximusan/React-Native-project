@@ -3,8 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
-  Image,
   ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
@@ -25,7 +23,6 @@ import { UserAvatar } from "../../components/AvatarBox/UserAvatar";
 import { authLogOutUser } from "../../redux/auth/authOperations";
 import { PostsList } from "../../components/PostsList/PostList";
 import { likedPosts } from "../../helpers/likeHandler";
-// import { uploadUserAvatar } from "../../redux/auth/authOperations";
 import { pickImageAsync } from "../../helpers/imagePicker";
 import {
   deleteUserPhoto,
@@ -81,7 +78,7 @@ export const ProfileScreen = ({ navigation }) => {
       const result = await pickImageAsync();
       const photoForDownload = await uploadNewUserAvatar(displayName, result);
       addUserPhoto(photoForDownload, dispatch);
-      console.log("auth.currentUs", auth.currentUser);
+      // console.log("auth.currentUs", auth.currentUser);
     } catch (error) {
       console.log("getUserAvatar-error:", error);
     }
@@ -99,7 +96,7 @@ export const ProfileScreen = ({ navigation }) => {
       });
       return allPostComments;
     } catch (error) {
-      console.log("deleteCommentsForPost", error);
+      console.log("deleteCommentsForPost - error:", error);
     }
   };
 
@@ -108,7 +105,7 @@ export const ProfileScreen = ({ navigation }) => {
       const goodByePost = await deleteDoc(doc(firestoreDB, "posts", id));
       return goodByePost;
     } catch (error) {
-      console.log("deletePostFromFirebase", error);
+      console.log("deletePostFromFirebase - error:", error);
     }
   };
 
@@ -124,9 +121,6 @@ export const ProfileScreen = ({ navigation }) => {
     deleteCommentsForPost(id);
     deletePostFromFirebase(id);
   };
-
-  // console.log("updateUserPosts", updateUserPosts);
-  // console.log("userPosts", userPosts);
 
   return (
     <View style={styles.container}>
@@ -159,7 +153,6 @@ export const ProfileScreen = ({ navigation }) => {
                   name="logout"
                   size={24}
                   color="#BDBDBD"
-                  // color="#f50e0e"
                   onPress={() => logOut()}
                 />
               </TouchableOpacity>
@@ -173,7 +166,6 @@ export const ProfileScreen = ({ navigation }) => {
                 navigation={navigation}
                 posts={userPosts}
                 orientation={orientation.isPortrait}
-                // deletePost={deletePost}
               />
             </ContextUserRemovesPost.Provider>
           </View>
@@ -186,18 +178,12 @@ export const ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: "center",
-    // alighItems: "center",
   },
   image: {
     flex: 1,
     resizeMode: "cover",
     height: 812,
     paddingTop: 147,
-
-    // paddingTop: 60,
-    // justifyContent: "flex-end",
-    // alignItems: "center",
   },
   profileContainer: {
     alignItems: "center",
@@ -207,12 +193,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingTop: 92,
-    // paddingTop: 12,
   },
   profileLogoutBtn: {
     position: "absolute",
-    // top: -75,
-    // right: -170,
+
     bottom: 117,
     left: 175,
   },

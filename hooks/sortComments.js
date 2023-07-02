@@ -13,7 +13,7 @@ export const useSortComments = (comments) => {
         return 1;
       } else return -1;
     });
-    console.log("SORTED-coments", result);
+    // console.log("SORTED-coments", result);
     setSortComments(result);
     return result;
   };

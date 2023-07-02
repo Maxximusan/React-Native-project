@@ -8,18 +8,18 @@ export const useLoaderOnScreenRotation = (orientation) => {
       setSpinner(true);
       timerId = setTimeout(() => {
         setSpinner(false);
-        console.log("its width");
+        // console.log("its width");
       }, 1000);
 
-      //   clearTimeout(timerId);
+     
     } else {
       setSpinner(true);
       timerId = setTimeout(() => {
         setSpinner(false);
-        console.log("its height");
+        // console.log("its height");
       }, 1000);
 
-      //   clearTimeout(timerId);
+      
     }
     return () => clearTimeout(timerId);
   }, [orientation]);

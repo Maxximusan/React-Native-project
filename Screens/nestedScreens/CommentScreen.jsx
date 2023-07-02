@@ -32,7 +32,6 @@ import { useLoaderOnScreenRotation } from "../../hooks/loader";
 
 export const CommentScreen = ({ route }) => {
   const { postId, photo } = route.params;
-
   // или
   // const postId = route.params.postId;
 
@@ -53,7 +52,7 @@ export const CommentScreen = ({ route }) => {
   }, []);
 
   useEffect(() => {
-    updateCommentsAmount(allComments.length);
+    setCommentsAmount(allComments.length);
   }, [allComments]);
 
   useEffect(() => {
@@ -93,21 +92,17 @@ export const CommentScreen = ({ route }) => {
     );
   };
 
-  allComments.map((comment) => {
-    dayjs(comment.timeOfCreation).format("DD MMMM, YYYY | HH:mm");
-    // console.log("LOOK", dayjs(comment.timeOfCreation).unix());
-  });
-  // console.log("sortedcomments", sortComments);
+  // allComments.map((comment) => {
+  //   dayjs(comment.timeOfCreation).format("DD MMMM, YYYY | HH:mm");
+  //   // console.log("LOOK", dayjs(comment.timeOfCreation).unix());
+
+  // });
 
   const submitAddComment = async () => {
     await createComment();
     setComment("");
     keyboardHide();
     setHeight(null);
-  };
-
-  const updateCommentsAmount = (allComments) => {
-    setCommentsAmount(allComments);
   };
 
   const updateCommentsAmountForFirestore = async () => {
@@ -207,16 +202,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "flex-end",
-    // alignItems: "center",
     marginHorizontal: 16,
-    // backgroundColor: "#ffffff",
   },
   commentContainer: {
     borderWidth: 0.5,
     borderColor: "#0882e6",
     marginHorizontal: 10,
     padding: 10,
-    // marginBottom: 10,
+
     width: "100%",
     backgroundColor: "#e0e0e0",
   },
@@ -224,7 +217,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 8,
     bottom: 8,
-    // bottom: -20,
+
     alignItems: "center",
     justifyContent: "center",
     width: 34,
@@ -237,13 +230,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   inputContainer: {
-    // position: "absolute",
-    // bottom: 10,
     alignSelf: "center",
-    // marginHorizontal: 16,
     width: "100%",
-    // height: 50,
-    // marginBottom: 28,
   },
   input: {
     paddingLeft: 16,
@@ -256,19 +244,17 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 16,
     lineHeight: 19,
-    // color: `#212121`,
   },
   photoContainer: {
     paddingTop: 12,
     alignItems: "center",
-    // marginHorizontal: 16,
+
     marginBottom: 12,
   },
   photo: {
     height: 120,
     width: "50%",
-    // height: "50%",
-    // marginHorizontal: 16,
+
     borderRadius: 8,
   },
   currentUserComment: {

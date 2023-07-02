@@ -8,7 +8,7 @@ import {
 import { firestoreDB } from "../firebase/config";
 
 export const addLike = async (posts, id, userId) => {
-  // const itemID = id;
+ 
   const likesRef = doc(firestoreDB, "posts", id);
 
   posts?.map((post) => {

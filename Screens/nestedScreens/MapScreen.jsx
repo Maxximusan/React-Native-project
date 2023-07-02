@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export const MapScreen = ({ route }) => {
-  console.log("route.params.location", route.params.location);
+  // console.log("route.params.location", route.params.location);
   const { latitude, longitude } = route.params.location;
   return (
     <View style={styles.container}>

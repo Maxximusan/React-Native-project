@@ -3,7 +3,6 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { auth, storage } from "../firebase/config";
 import { authSlice } from "../redux/auth/authReducer";
 
-const storage2 = getStorage();
 
 export const deleteUserPhoto = async (dispatch) => {
   try {
@@ -45,11 +44,12 @@ export const addUserPhoto = async (photoForDownload, dispatch) => {
     // .then(() => {
     //   console.log("Added new photo!");
     // })
-    console.log("error", error);
+    console.log("addUserPhoto - error:", error);
   }
 };
 
 export const uploadNewUserAvatar = async (login, avatar) => {
+  try{
   const response = await fetch(avatar);
   const file = await response.blob();
   const uniqueAvatarId = Date.now().toString();
@@ -58,5 +58,8 @@ export const uploadNewUserAvatar = async (login, avatar) => {
   const avatarUrl = await getDownloadURL(
     ref(storage, `usersAvatars/${login}${uniqueAvatarId}`)
   );
-  return avatarUrl;
+    return avatarUrl;
+  } catch (error) {
+    console.log("uploadNewUserAvatar - error:", error);
+    }
 };
