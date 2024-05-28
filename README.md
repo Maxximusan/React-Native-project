@@ -25,16 +25,18 @@ ___
   
 
 ### How to see this app on your device:
-1. Download on your device "expo" app from _Google Play_
+1. Download on your device "expo" app from _Google Play_ as like screenshot below:
 
-![screen google play](./assets/images/photo_expo.jpg)
+![screen google play](./assets/images/photo_expo2.jpg)
 
 2. copy this link:
 `exp://exp.host/@dayenerys_targarien/React-Native-project?release-channel=default`     
 >
-3. add it in your Google search bar ( Not Chrome !), and go
+3. add it in your Google search bar ( Not Chrome !) as like screenshot below:
 
-![screen google search bar](./assets/images/photo_goggle_search_bar.jpg)
+![screen google search bar](./assets/images/photo_goggle_search_bar2.jpg)
+
+4. You are already inside...
 ___
 
 
