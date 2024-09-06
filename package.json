@@ -42,6 +42,7 @@
   },
   "private": true,
   "overrides": {
-    "xml2js": "^0.6.0"
+    "xml2js": "^0.6.0",
+    "semver": "^7.5.3"
   }
 }
