@@ -40,5 +40,8 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "overrides": {
+    "xml2js": "^0.6.0"
+  }
 }
